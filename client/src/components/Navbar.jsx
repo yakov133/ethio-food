@@ -103,6 +103,12 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
             <Link onClick={()=>sethumburgerlinks(!humburgerlinks)} to="/About">
               אודות
             </Link>
+            {userLogedIn.email === "yakov133@walla.com"?
+            <Link className={style.link_nav} to="/Admin">
+            ניהול
+          </Link>
+            :
+            ""}
             
           </nav>
         ) : (
