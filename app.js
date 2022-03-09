@@ -8,17 +8,10 @@ var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-//add bby me!
-// import { fileURLToPath } from "url";
 
-// const  fileURLToPath = require( "url");
-// const _filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(_filename);
-
-// import multer from "multer"
-const multer = require("multer");
-const uploadDirectory = "uploads/";
-const upload = multer({ dest: uploadDirectory });
+// const multer = require("multer");
+// const uploadDirectory = "uploads/";
+// const upload = multer({ dest: uploadDirectory });
 
 var app = express();
 
