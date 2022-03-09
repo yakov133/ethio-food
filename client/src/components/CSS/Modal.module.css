@@ -1,0 +1,57 @@
+.main_modal {
+  transform: translate(-50%, -50%);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  z-index: 2;
+}
+
+.sun{
+  background-color:antiquewhite;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.boder_main {
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: rgb(127, 193, 127); 
+}
+.boder_main_singIn{       
+  padding: 4rem;
+  border-radius: 0.5rem;
+  background-color: rgb(127, 193, 127); 
+}
+.p_link {
+  color: blue;
+}
+.p_link:hover {
+  text-decoration: underline;
+}
+.err {
+  color: red;
+}
+.close_btn{
+    font-size: 200%;
+    color: rgb(127, 193, 127);
+}
+form input {
+  padding: 2%;
+  border-radius: 0.5rem;
+}
+form button{
+  border: none;
+  background-color: transparent;
+  font-size: 3rem;
+}
+.spiner{
+  color: red !important; 
+  /* margin-left: 5px; */
+  text-align: center;
+}
+input[type="email"]::placeholder {  
+                  
+  /* Firefox, Chrome, Opera */ 
+  text-align: right; 
+} 

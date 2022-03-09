@@ -1,0 +1,70 @@
+.info{
+  margin-top: 4%;
+  margin-bottom: 3%;
+ }
+ .h1_style{
+  text-align: center;
+}
+ .card_option {
+  text-align: center;
+}
+.card_option img {
+  width: 23rem;
+  height: 20rem;
+  border-radius: 0.5rem;
+  filter: drop-shadow(1px 2px 6px black);
+  transition:transform 450ms;
+}
+.card_option img:hover {
+  transform: scale(1.08);
+  opacity: 0.8;
+}
+
+.order {
+  display: grid;
+  grid-template-columns: repeat(3, 30%);
+  justify-items: center;
+  justify-content: space-around;
+}
+.icon {
+  background-color: #9AA39A;
+  font-size: xx-large;
+  border-radius: 50%;
+  filter: drop-shadow(1px 2px 3px black);
+}
+.icon:hover {
+  color: white;
+}
+
+.spinner{
+  display: grid;
+  justify-content: center;
+}
+.noRecipes{
+  text-align: center  ;
+  font-size: xx-large;
+  font-weight: bold;
+  text-align: center;
+  color: red;
+}
+
+@media screen and (max-width: 1600px) {
+  .order {
+    display: grid;
+    grid-template-columns: repeat(2,50%);
+    justify-items: center;
+    justify-content: center;
+    margin-bottom: 3%;
+  }
+}
+
+@media screen and (max-width: 980px) {
+  .order {
+    display: grid;
+    grid-template-columns: repeat(1,100%);
+    justify-items: center;
+    justify-content: center;
+    margin-bottom: 10%;
+  }
+}
+

@@ -1,0 +1,53 @@
+.space {
+  margin-top: 8%;
+  margin-bottom: 7%;
+}
+table,th,td {
+  border: 1px solid black;
+}
+table {
+  border-collapse: collapse;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.sneakPicImg{
+  width: 20rem;
+  height: 20rem;
+  border-radius: 3.5rem;
+
+}
+td img {
+  width: 11rem;
+  height: 9rem;
+  border-radius: 50%;
+  padding: 1rem;
+}
+.icon {
+  width: 5rem;
+  height: 3rem;
+}
+.icon:hover {
+  /* box-shadow: 1px 2px 3px grey; */
+  background-color: grey;
+  border-radius: 50rem;
+}
+.detailsPreveiew {
+  background-color: transparent;
+  border-radius: 0.5rem;
+}
+.preveiew {
+  display: grid;
+  justify-content: center;
+}
+
+.spinner{
+  display: grid;
+  justify-content: center;
+}
+.noRecipes{
+  font-size: xx-large;
+  font-weight: bold;
+  text-align: center;
+  color: red;
+}

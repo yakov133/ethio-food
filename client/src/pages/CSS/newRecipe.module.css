@@ -1,0 +1,109 @@
+.firstDiv {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.div {
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  padding: 3%;
+  margin-top: 5%;
+}
+.fromRap {
+  background-color: #e6e4e2;
+  display: flex;
+  justify-content: center;
+}
+
+.form {
+  margin: 1%;
+  border-radius: 0.5rem;
+  filter: drop-shadow(1px 4px 6px black);
+  background-color: #c2c2bc;
+  width: 35%;
+  padding: 1%;
+  display: grid;
+  align-content: stretch;
+  justify-content: space-evenly;
+  align-items: baseline;
+  justify-items: stretch;
+}
+.send {
+  width: 10%;
+  border-radius: 50%;
+  font-size: 25px;
+  margin-right: 40%;
+}
+.send:hover {
+  background-color: bisque;
+}
+.updateImg {
+  width: 19rem;
+  margin-right: 20%;
+  border-radius: 50%;
+  margin-bottom: 3%;
+  margin-top: 5%;
+}
+@media screen and (max-width: 1300px) {
+  .form {
+   /* margin: 1%;
+   border-radius: 0.5rem;
+   filter: drop-shadow(1px 4px 6px black);
+   background-color: #c2c2bc; */
+   width: 50%;
+   /* padding: 1%;
+   display: grid;
+   align-content: stretch;
+   justify-content: space-evenly;
+   align-items: baseline;
+   justify-items: stretch; */
+ } 
+}
+
+@media screen and (max-width: 980px) {
+   .form {
+    /* margin: 1%;
+    border-radius: 0.5rem;
+    filter: drop-shadow(1px 4px 6px black);
+    background-color: #c2c2bc; */
+    width: 70%;
+    /* padding: 1%;
+    display: grid;
+    align-content: stretch;
+    justify-content: space-evenly;
+    align-items: baseline;
+    justify-items: stretch; */
+  } 
+  
+}
+
+@media screen and (max-width: 690px) {
+  .form {
+   /* margin: 1%;
+   border-radius: 0.5rem;
+   filter: drop-shadow(1px 4px 6px black);
+   background-color: #c2c2bc; */
+   width: 90%;
+   /* padding: 1%;
+   display: grid;
+   align-content: stretch;
+   justify-content: space-evenly;
+   align-items: baseline;
+   justify-items: stretch; */
+ } 
+ 
+}
+@media screen and (max-width: 760px) {
+  .fromRap{
+    background-color: #e6e4e2;
+    display: flex;
+    justify-content: flex-start;
+  }   
+  .fromRap textarea,.div{
+    width: 20rem;
+  }
+  .updateImg {
+   margin-right: 0px;
+  }
+ 
+}

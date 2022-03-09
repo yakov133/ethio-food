@@ -1,0 +1,162 @@
+
+*{
+  padding: 0;
+  margin: 0;
+}
+.info{
+ margin-top: 3.5%;
+}
+.h1_style{
+  text-align: center;
+}
+
+.nav_user_loged_in {
+    overflow: hidden;
+    background-color: black;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    margin-bottom: 1  0px;
+    filter: drop-shadow(1px 2px 6px gray);
+    font-weight: bold;
+}
+
+.link_nav {
+    text-decoration: none;
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 7px 8px;
+    padding-left: 11rem;
+    font-size: 17px;
+}
+.link_nav:hover {
+  text-decoration: underline;
+  font-size: large;
+  font-weight: bold;
+}
+.sign_out {
+  color: #fd7c04;
+  float: right;
+  margin: 1%;
+  font-size: 20px;
+  border: none;
+  border-radius: 50%;
+}
+.sign_out:hover{
+  background-color: #9a4e08;
+  color: white;
+  border-radius: 50%;
+}
+.nav_no_user {
+  overflow: hidden;
+    background-color: black;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    margin-bottom: 14%;
+    filter: drop-shadow(1px 2px 4px gray);
+}
+.nav_no_user .link_nav {
+  text-decoration: none;
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  padding-left: 20rem;
+  font-size: 19px;
+}
+.nav_no_user .link_nav:hover {
+  text-decoration: underline;
+  font-size: large;
+  font-weight: bold;
+}
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2rem;
+  background-color: black;
+  color: white;
+  text-align: center;
+  font-size: 1.2rem;
+  filter: drop-shadow(1px 2px 4px gray);
+}
+.icons {
+  margin-left: 1rem;
+  font-size: x-large;
+  color: white;
+}
+.icons:hover,
+.linkdin:hover {
+  color: blue;
+}
+.linkdin {
+  color: white;
+  text-decoration: none;
+}
+textarea{
+  border-radius: 0.5rem;
+}
+
+.humburger1,.humburger2{
+  display: none;
+}
+.humburger2{
+  width: 100%;
+  height: 100vh;
+  background-color: #333;
+}
+.humburger_links_hidde{
+  display: none;
+}
+.humburger_links {
+  position: relative;
+}
+.nav_phone{
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex-direction: column;
+  
+}
+.humburger_links a{
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 4%;
+}
+.btn_1{
+  font-size: large;
+  margin: 1rem;
+  border: none;
+  background: transparent;
+}
+.btn_2{
+  font-size: large;
+  margin: 1rem;
+  border: none;
+  color: white;
+  background: transparent;  
+}
+
+@media screen and (max-width: 1024px) {
+  .nav_user_loged_in,.nav_no_user{
+    display: none;
+  }
+  .humburger1,.humburger2{
+    display: block;
+    position: fixed;
+    z-index: 1;
+  }
+  
+}
+
+@media screen and (max-width: 980px) {
+  
+}

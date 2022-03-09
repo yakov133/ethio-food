@@ -1,0 +1,51 @@
+.img {
+  border-radius: 50%;
+  width: 20rem;
+  height: 15rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+div p {
+  font-size: 1rem;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-weight: bold;
+}
+.p_first {
+}
+.p_second {
+}
+.hero_image {
+  background-image: url("https://i.pinimg.com/474x/2c/40/d4/2c40d4042c9ebb2099635a301540bd8b.jpg");
+  height: 100vh;
+  /* background-position: center; */
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: grid;
+  align-content: space-around;
+  justify-content: center;
+}
+.hero_image p {
+  color: white;
+  font-size: x-large;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+.hero_image div {
+  text-align: center;
+}
+
+/* background-image: url(https://i.pinimg.com/474x/2c/40/d4/2c40d40….jpg);
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+background-size: cover; */
+
+@media screen and (max-width: 1466px) {
+  /* .hero_image {
+    background-image: url("https://i.pinimg.com/474x/2c/40/d4/2c40d4042c9ebb2099635a301540bd8b.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-size: cover;
+  } */
+}
