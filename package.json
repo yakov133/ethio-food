@@ -1,7 +1,10 @@
 {
   "name": "server",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": "14.16.1"
+  },
   "scripts": {
     "start": "nodemon ./bin/www",
     "client": "cd client && npm start",
