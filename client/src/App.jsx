@@ -66,6 +66,33 @@ function App() {
 export default App;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // {userLogedIn ? (
 //   <nav className={style.nav_user_loged_in}>
 //     <Link className={style.link_nav} to="/About">

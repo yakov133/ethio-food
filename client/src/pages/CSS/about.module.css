@@ -48,4 +48,11 @@ background-size: cover; */
     background-size: cover;
     background-size: cover;
   } */
+  .hero_image{
+    height: 100%;
+    margin-bottom: 2rem;
+  }
+  .phoneSize{
+    margin-top: 4rem;  
+  }
 }

@@ -9,9 +9,7 @@ var cors = require('cors');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-// const multer = require("multer");
-// const uploadDirectory = "uploads/";
-// const upload = multer({ dest: uploadDirectory });
+
 
 var app = express();
 
