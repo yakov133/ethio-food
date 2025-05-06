@@ -26,7 +26,7 @@ const AllRecips = ({ setDetails }) => {
   },[recipes]);
 
   function getRecpies() {
-    const URL = "/recipes";
+    const URL = "https://ethio-food-api.onrender.com/recipes";
     axios
       .get(URL)
       .then((res) => {
