@@ -16,12 +16,12 @@
     "react-spinners": "^0.11.0",
     "web-vitals": "^2.1.3"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
+ "scripts": {
+  "start": "SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
+  "build": "SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject"
+},
   "proxy": "http://localhost:3001",
   "eslintConfig": {
     "extends": "react-app"

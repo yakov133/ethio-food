@@ -1,5 +1,5 @@
 import axios from "axios";
-import React,  { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./CSS/allRecips.module.css";
 import { MdReadMore } from "react-icons/md";
 import { Redirect } from "react-router-dom";
@@ -13,7 +13,12 @@ const AllRecips = ({ setDetails }) => {
   const [search, setsearch] = useState(false);
   const [flag, setflag] = useState(false);
 
-  useEffect(getRecpies,[]);
+  // בדיקה שמשתנה הסביבה נטען כראוי
+  useEffect(() => {
+    console.log("API URL:", process.env.REACT_APP_API_URL);
+  }, []);
+
+  useEffect(getRecpies, []);
 
   useEffect(() => {
     if (!imageFlag) {
@@ -23,10 +28,13 @@ const AllRecips = ({ setDetails }) => {
         getImage(temp, temp[i].src, i);
       }
     }
-  },[recipes]);
+  }, [recipes]);
 
   function getRecpies() {
-    const URL = "https://ethio-food-api.onrender.com/recipes";
+    // שימוש במשתנה סביבה או בכתובת קבועה אם אין משתנה
+    const API_URL = process.env.REACT_APP_API_URL || "https://ethio-food-api.onrender.com";
+    const URL = `${API_URL}/recipes`;
+    
     axios
       .get(URL)
       .then((res) => {
@@ -38,24 +46,31 @@ const AllRecips = ({ setDetails }) => {
   }
 
   const getImage = async (data, filename, i) => {
-    const res = await axios.get(`/image/${filename}`, { responseType: "blob" });
-    if (res.status === 200) {
-      const reader = new FileReader();
-      reader.readAsDataURL(res.data);
-      reader.onload = () => {
-        const imgeDataURL = reader.result;
-        data[i].src = imgeDataURL;
-        if (i + 1 === data.length) {
-          setimageFlag(true);
-          setTimeout(()=>setrecipes(data),1000)
-          // setrecipes(data);
-        }
-      };
-    } else {
-      console.log(`error status code: ${res.status}`);
+    try {
+      // שימוש במשתנה סביבה גם בפונקציית התמונות
+      const API_URL = process.env.REACT_APP_API_URL || "https://ethio-food-api.onrender.com";
+      const URL = `${API_URL}/image/${filename}`;
+      
+      const res = await axios.get(URL, { responseType: "blob" });
+      
+      if (res.status === 200) {
+        const reader = new FileReader();
+        reader.readAsDataURL(res.data);
+        reader.onload = () => {
+          const imgeDataURL = reader.result;
+          data[i].src = imgeDataURL;
+          if (i + 1 === data.length) {
+            setimageFlag(true);
+            setTimeout(() => setrecipes(data), 1000);
+          }
+        };
+      } else {
+        console.log(`error status code: ${res.status}`);
+      }
+    } catch (error) {
+      console.error("Error fetching image:", error);
     }
   };
-  
 
   const handelSearch = (e) => {
     if (e.target.value !== "" && e.target.value !== " ") {
@@ -72,9 +87,9 @@ const AllRecips = ({ setDetails }) => {
         }
       }
       if (tempRecipes.length > 0) {
-        if(tempRecipes.length >10){
-          setsearch(tempRecipes.slice(0,10));
-        }else{
+        if (tempRecipes.length > 10) {
+          setsearch(tempRecipes.slice(0, 10));
+        } else {
           setsearch(tempRecipes);
         }
       } else {
@@ -91,8 +106,6 @@ const AllRecips = ({ setDetails }) => {
 
   return (
     <div>
-      
-      {/* <iframe className={style.iframe}  src="https://www.youtube.com/embed/zrqkLrheOdk?autoplay=1&mute=1&loop=1" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> */}
       <video className={style.iframe} src={mainVideo} autoPlay loop muted />
       <div className={style.info}>
         
@@ -131,7 +144,7 @@ const AllRecips = ({ setDetails }) => {
                 </div>
               </div>
             ))}
-          {search?Array.isArray(search) ? (
+          {search ? Array.isArray(search) ? (
             search.map((recip, i) => (
               <div key={i}>
                 <div className={style.center_all}>
@@ -144,7 +157,7 @@ const AllRecips = ({ setDetails }) => {
                   />
                   <p>
                     <MdReadMore
-                    title="למתכון"
+                      title="למתכון"
                       className={style.icon}
                       onClick={() => {
                         setDetails(recip.id);
@@ -157,10 +170,11 @@ const AllRecips = ({ setDetails }) => {
             ))
           ) : (
             <span> לא נמצאו תוצאות</span>
-          ):[]}
+          ) : []}
         </div>
       </div>
     </div>
   );
 };
+
 export default AllRecips;
