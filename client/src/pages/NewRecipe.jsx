@@ -1,4 +1,4 @@
-import React,  { useState } from "react";
+import React, { useState } from "react";
 import appStyle from "../App.module.css";
 import style from "./CSS/newRecipe.module.css";
 import axios from "axios";
@@ -7,6 +7,10 @@ import { GrSend } from "react-icons/gr";
 
 const NewRecipe = ({ userLogedIn }) => {
   document.title = "New Recipe";
+  
+  // הגדרת ה-API URL פעם אחת
+  const API_URL = process.env.REACT_APP_API_URL || "https://ethio-food-api.onrender.com";
+  
   const [title, settitle] = useState("");
   const [name, setname] = useState("");
   const [file, setfile] = useState("");
@@ -15,9 +19,12 @@ const NewRecipe = ({ userLogedIn }) => {
   const [Instructions, setInstructions] = useState("");
   const [Nots, setNots] = useState("");
   const [flag, setflag] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const loadtoserver = (e) => {
     e.preventDefault();
+    setLoading(true);
+    
     let formData = new FormData();
     formData.append("someFile", file);
     formData.append("title", title);
@@ -28,7 +35,7 @@ const NewRecipe = ({ userLogedIn }) => {
     formData.append("Nots", Nots);
     formData.append("localId", userLogedIn.localId);
 
-    const URL = "/recipe";
+    const URL = `${API_URL}/recipe`;
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -41,10 +48,15 @@ const NewRecipe = ({ userLogedIn }) => {
         if (res.status === 201) {
           setflag(true);
         } else {
-          console.log(`error status code ${res.status}`);
+          console.log(`Error status code: ${res.status}`);
+          setLoading(false);
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error("Error uploading recipe:", err);
+        setLoading(false);
+        alert("שגיאה בהעלאת המתכון. אנא נסה שוב.");
+      });
   };
 
   if (flag) {
@@ -63,6 +75,7 @@ const NewRecipe = ({ userLogedIn }) => {
               id="title"
               required
               onChange={(e) => settitle(e.target.value)}
+              disabled={loading}
             />
           </div>
 
@@ -74,10 +87,11 @@ const NewRecipe = ({ userLogedIn }) => {
               id="name"
               required
               onChange={(e) => setname(e.target.value)}
+              disabled={loading}
             />
           </div>
           <br />
-          <div >
+          <div>
             <p>יש לבחור קטגוריה מתאימה למתכון:</p>
             <input
               type="radio"
@@ -86,6 +100,7 @@ const NewRecipe = ({ userLogedIn }) => {
               name="category"
               required
               onChange={(e) => setcategory(e.target.value)}
+              disabled={loading}
             />
             <label htmlFor="Vegeterian">צמחוני:</label>
             <br />
@@ -97,6 +112,7 @@ const NewRecipe = ({ userLogedIn }) => {
               name="category"
               required
               onChange={(e) => setcategory(e.target.value)}
+              disabled={loading}
             />
             <label htmlFor="Vegan">טבעוני:</label>
             <br />
@@ -108,6 +124,7 @@ const NewRecipe = ({ userLogedIn }) => {
               name="category"
               required
               onChange={(e) => setcategory(e.target.value)}
+              disabled={loading}
             />
             <label htmlFor="Milk">חלבי:</label>
             <br />
@@ -118,14 +135,21 @@ const NewRecipe = ({ userLogedIn }) => {
               name="category"
               required
               onChange={(e) => setcategory(e.target.value)}
+              disabled={loading}
             />
             <label htmlFor="Meat">בשרי:</label>
             <br />
           </div>
 
           <div className={style.div}>
-            <p>:נא להעלות תמונה למתכון</p>
-            <input type="file" onChange={(e) => setfile(e.target.files[0])} required/>
+            <p>נא להעלות תמונה למתכון:</p>
+            <input 
+              type="file" 
+              onChange={(e) => setfile(e.target.files[0])} 
+              required
+              disabled={loading}
+              accept="image/*"
+            />
           </div>
           <br />
 
@@ -134,11 +158,12 @@ const NewRecipe = ({ userLogedIn }) => {
             <br />
             <textarea
               name=""
-              id="ה"
+              id="Ingredients"
               cols="60"
               rows="10"
               required
               onChange={(e) => setIngredients(e.target.value)}
+              disabled={loading}
             ></textarea>
           </div>
           <br />
@@ -153,11 +178,12 @@ const NewRecipe = ({ userLogedIn }) => {
               rows="10"
               required
               onChange={(e) => setInstructions(e.target.value)}
+              disabled={loading}
             ></textarea>
           </div>
           <br />
 
-          <div required>
+          <div>
             <label htmlFor="Nots">הערות:</label>
             <br />
             <textarea
@@ -166,12 +192,18 @@ const NewRecipe = ({ userLogedIn }) => {
               cols="60"
               rows="10"
               onChange={(e) => setNots(e.target.value)}
+              disabled={loading}
             ></textarea>
           </div>
           <br />
 
-          <button className={style.send} type="submit" title="לשלוח">
-            <GrSend />
+          <button 
+            className={style.send} 
+            type="submit" 
+            title="לשלוח"
+            disabled={loading}
+          >
+            {loading ? <ClipLoader size={20} /> : <GrSend />}
           </button>
         </form>
       </div>
@@ -180,4 +212,5 @@ const NewRecipe = ({ userLogedIn }) => {
     </div>
   );
 };
+
 export default NewRecipe;
