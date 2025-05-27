@@ -6,7 +6,8 @@
 // import uuid from "uuid";
 // const { v4: uuidv4 } = uuid;
 // import fs from "fs-extra";
-
+console.log("MongoDB URL:", process.env.MONGODB_URL);
+console.log("Environment:", process.env.NODE_ENV);
 const mongodb = require ("mongodb");
 
 require("dotenv").config();
@@ -176,6 +177,7 @@ function newRecipe(req,res){
       if (err) throw err;
       console.log("1 document inserted");
       res.sendStatus(201);
+      // res.status(201).json({ message: "Recipe created successfully", id: myobj.id });
       db.close();
     });
   });
