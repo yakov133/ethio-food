@@ -6,6 +6,9 @@ import { Redirect } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const Categories = ({ getCategory, setCategory, setDetails }) => {
+  // הגדרת ה-API URL פעם אחת בראש הקומפוננטה
+  const API_URL = process.env.REACT_APP_API_URL || "https://ethio-food-api.onrender.com";
+  
   const [recipes, setRecipse] = useState([]);
   const [imageFlag, setimageFlag] = useState(false);
   const [flag, setflag] = useState(false);
@@ -23,7 +26,8 @@ const Categories = ({ getCategory, setCategory, setDetails }) => {
   }
 
   useEffect(() => {
-    const URL = `/categories/${getCategory()}`;
+    const URL = `${API_URL}/categories/${getCategory()}`;
+    
     axios
       .get(URL)
       .then((res) => {
@@ -32,42 +36,44 @@ const Categories = ({ getCategory, setCategory, setDetails }) => {
         setspinner(false);
         setRecipse(temp);
       })
-      .catch((err) => console.log(err));
-  }, []);
+      .catch((err) => {
+        console.log("Error fetching categories:", err);
+        setspinner(false);
+      });
+  }, [getCategory]);
 
   useEffect(() => {
-    if (!imageFlag) {
+    if (!imageFlag && recipes.length > 0) {
       let temp = [...recipes];
       for (let i = 0; i < temp.length; i++) {
         getImage(temp, temp[i].src, i);
       }
     }
-    // if(imageFlag){
-    //   setRecipse([]);
-    // }
-  }, [recipes]);
+  }, [recipes, imageFlag]);
 
   const getImage = async (data, filename, i) => {
-    await axios
-      .get(`/image/${filename}`, { responseType: "blob" })
-      .then((res) => {
-        if (res.status === 200) {
-          const reader = new FileReader();
-          reader.readAsDataURL(res.data);
-          reader.onload = () => {
-            const imgeDataURL = reader.result;
-            data[i].src = imgeDataURL;
-            if (i + 1 === data.length) {
-              setimageFlag(true);
-              setRecipse(data);
-              console.log("im here");
-            }
-          };
-        } else {
-          console.log(`error status code: ${res.status}`);
-        }
-      })
-      .catch((err) => console.error(err));
+    try {
+      const res = await axios.get(`${API_URL}/image/${filename}`, { 
+        responseType: "blob" 
+      });
+      
+      if (res.status === 200) {
+        const reader = new FileReader();
+        reader.readAsDataURL(res.data);
+        reader.onload = () => {
+          const imgeDataURL = reader.result;
+          data[i].src = imgeDataURL;
+          if (i + 1 === data.length) {
+            setimageFlag(true);
+            setRecipse(data);
+          }
+        };
+      } else {
+        console.log(`Error status code: ${res.status}`);
+      }
+    } catch (err) {
+      console.error("Error fetching image:", err);
+    }
   };
 
   if (flag) {
@@ -90,7 +96,7 @@ const Categories = ({ getCategory, setCategory, setDetails }) => {
               </p>
               <br />
               <img
-                src={recip.src.includes("data") ? recip.src : ""}
+                src={recip.src && recip.src.includes("data") ? recip.src : ""}
                 alt={`${recip.title} תמונה`}
               />
               <p>
