@@ -46,11 +46,14 @@ const NewRecipe = ({ userLogedIn }) => {
     axios
       .post(URL, formData, config)
       .then((res) => {
-        if (res.status === 201) {
+        console.log("Server response:", res.status, res.data);
+        if (res.status === 200 || res.status === 201) {
           setflag(true);
+          alert("המתכון נוסף בהצלחה!");
         } else {
           console.log(`Error status code: ${res.status}`);
           setLoading(false);
+          alert("שגיאה בהוספת המתכון");
         }
       })
       .catch((err) => {
@@ -75,6 +78,7 @@ const NewRecipe = ({ userLogedIn }) => {
               type="text"
               id="title"
               required
+              value={title}
               onChange={(e) => settitle(e.target.value)}
               disabled={loading}
             />
@@ -87,6 +91,7 @@ const NewRecipe = ({ userLogedIn }) => {
               type="text"
               id="name"
               required
+              value={name}
               onChange={(e) => setname(e.target.value)}
               disabled={loading}
             />
@@ -100,10 +105,11 @@ const NewRecipe = ({ userLogedIn }) => {
               value="Vegeterian"
               name="category"
               required
+              checked={category === "Vegeterian"}
               onChange={(e) => setcategory(e.target.value)}
               disabled={loading}
             />
-            <label htmlFor="Vegeterian">צמחוני:</label>
+            <label htmlFor="Vegeterian">צמחוני</label>
             <br />
 
             <input
@@ -112,10 +118,11 @@ const NewRecipe = ({ userLogedIn }) => {
               value="Vegan"
               name="category"
               required
+              checked={category === "Vegan"}
               onChange={(e) => setcategory(e.target.value)}
               disabled={loading}
             />
-            <label htmlFor="Vegan">טבעוני:</label>
+            <label htmlFor="Vegan">טבעוני</label>
             <br />
 
             <input
@@ -124,10 +131,11 @@ const NewRecipe = ({ userLogedIn }) => {
               value="Milk"
               name="category"
               required
+              checked={category === "Milk"}
               onChange={(e) => setcategory(e.target.value)}
               disabled={loading}
             />
-            <label htmlFor="Milk">חלבי:</label>
+            <label htmlFor="Milk">חלבי</label>
             <br />
             <input
               type="radio"
@@ -135,10 +143,11 @@ const NewRecipe = ({ userLogedIn }) => {
               value="Meat"
               name="category"
               required
+              checked={category === "Meat"}
               onChange={(e) => setcategory(e.target.value)}
               disabled={loading}
             />
-            <label htmlFor="Meat">בשרי:</label>
+            <label htmlFor="Meat">בשרי</label>
             <br />
           </div>
 
@@ -158,11 +167,12 @@ const NewRecipe = ({ userLogedIn }) => {
             <label htmlFor="Ingredients">מצרכים:</label>
             <br />
             <textarea
-              name=""
+              name="Ingredients"
               id="Ingredients"
               cols="60"
               rows="10"
               required
+              value={Ingredients}
               onChange={(e) => setIngredients(e.target.value)}
               disabled={loading}
             ></textarea>
@@ -173,11 +183,12 @@ const NewRecipe = ({ userLogedIn }) => {
             <label htmlFor="Instructions">הוראות הכנה:</label>
             <br />
             <textarea
-              name=""
+              name="Instructions"
               id="Instructions"
               cols="60"
               rows="10"
               required
+              value={Instructions}
               onChange={(e) => setInstructions(e.target.value)}
               disabled={loading}
             ></textarea>
@@ -188,10 +199,11 @@ const NewRecipe = ({ userLogedIn }) => {
             <label htmlFor="Nots">הערות:</label>
             <br />
             <textarea
-              name=""
+              name="Nots"
               id="Nots"
               cols="60"
               rows="10"
+              value={Nots}
               onChange={(e) => setNots(e.target.value)}
               disabled={loading}
             ></textarea>
@@ -204,7 +216,7 @@ const NewRecipe = ({ userLogedIn }) => {
             title="לשלוח"
             disabled={loading}
           >
-            {loading ? <ClipLoader size={20} /> : <GrSend />}
+            {loading ? <ClipLoader size={20} color="#ffffff" /> : <GrSend />}
           </button>
         </form>
       </div>
