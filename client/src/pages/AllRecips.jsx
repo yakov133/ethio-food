@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import style from "./CSS/allRecips.module.css";
 import { MdReadMore } from "react-icons/md";
-import { Redirect } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import mainVideo from "../videos/Tibs.mp4"
 
@@ -12,6 +12,7 @@ const AllRecips = ({ setDetails }) => {
   const [imageFlag, setimageFlag] = useState(false);
   const [search, setsearch] = useState(false);
   const [flag, setflag] = useState(false);
+  const history = useHistory();
 
   // בדיקה שמשתנה הסביבה נטען כראוי
   useEffect(() => {
@@ -100,13 +101,8 @@ const AllRecips = ({ setDetails }) => {
     }
   };
 
-  if (flag) {
-    return <Redirect to="/Details" />;
-  }
-
   return (
     <div>
-      <video className={style.iframe} src={mainVideo} autoPlay loop muted />
       <div className={style.info}>
         
         <div className={style.searchBar}>
@@ -136,8 +132,7 @@ const AllRecips = ({ setDetails }) => {
                     <MdReadMore
                       className={style.icon}
                       onClick={() => {
-                        setDetails(recip.id);
-                        setflag(true);
+                        history.push(`/Details/${recip.id}`);
                       }}
                     />
                   </p>
@@ -160,8 +155,7 @@ const AllRecips = ({ setDetails }) => {
                       title="למתכון"
                       className={style.icon}
                       onClick={() => {
-                        setDetails(recip.id);
-                        setflag(true);
+                        history.push(`/Details/${recip.id}`);
                       }}
                     />
                   </p>
@@ -173,6 +167,7 @@ const AllRecips = ({ setDetails }) => {
           ) : []}
         </div>
       </div>
+      <video className={style.iframe} src={mainVideo} autoPlay loop muted />
     </div>
   );
 };

@@ -3,15 +3,17 @@ import React, { useEffect, useState } from "react";
 import categorystyle from "./CSS/categories.module.css";
 import style from "./CSS/details.module.css";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useParams } from "react-router-dom";
 
-const Details = ({ userLogedIn, getDetails, setDetails }) => {
+const Details = ({ userLogedIn }) => {
+  const { id } = useParams();
   const [recipe, setrecipe] = useState(false);
   const [newComment, setnewComment] = useState("");
   const [imgeFlag, setimgeFlag] = useState(false);
   const [readyToPresent, setreadyToPresent] = useState(false);
 
 
-  useEffect(getRecipe, []);
+  useEffect(getRecipe, [id]);
 
   useEffect(() => {
     if (!imgeFlag && recipe.src) {
@@ -20,9 +22,8 @@ const Details = ({ userLogedIn, getDetails, setDetails }) => {
   }, [recipe]);
 
   function getRecipe() {
-    const recipeId = getDetails();
     const API_URL = process.env.REACT_APP_API_URL || "https://ethio-food-api.onrender.com";
-    const URL = `${API_URL}/recipe/${recipeId}`;  // הוסף את הכתובת המלאה
+    const URL = `${API_URL}/recipe/${id}`;  // הוסף את הכתובת המלאה
 
     axios
       .get(URL)
@@ -104,7 +105,7 @@ const Details = ({ userLogedIn, getDetails, setDetails }) => {
 
     if (newComment && strNotEmpty) {
       const API_URL = process.env.REACT_APP_API_URL || "https://ethio-food-api.onrender.com";
-      const URL = `${API_URL}/recipe/${recipe.id}`;
+      const URL = `${API_URL}/recipe/${id}`;
       const obj = {
         comments: newComment
       };

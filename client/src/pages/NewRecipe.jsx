@@ -4,6 +4,7 @@ import style from "./CSS/newRecipe.module.css";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { GrSend } from "react-icons/gr";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const NewRecipe = ({ userLogedIn }) => {
   document.title = "New Recipe";

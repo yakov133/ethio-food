@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import style from "./CSS/home.module.css";
 import appStyle from "../App.module.css";
 
 const Home = ({ setCategory }) => {
   const [flag, setflag] = useState(false);
+  const history = useHistory();
   document.title = "Home";
 
   if (flag) {
@@ -54,8 +55,7 @@ const Home = ({ setCategory }) => {
         <div
           className={style.card_option}
           onClick={() => {
-            setCategory("Meat");
-            setflag(true);
+            history.push("/Categories/Meat");
           }}
         >
           <img
@@ -69,8 +69,7 @@ const Home = ({ setCategory }) => {
         <div
           className={style.card_option}
           onClick={() => {
-            setCategory("Milk");
-            setflag(true);
+            history.push("/Categories/Milk");
           }}
         >
           <img
@@ -84,8 +83,7 @@ const Home = ({ setCategory }) => {
         <div
           className={style.card_option}
           onClick={() => {
-            setCategory("Vegan");
-            setflag(true);
+            history.push("/Categories/Vegan");
           }}
         >
           <img
@@ -99,8 +97,7 @@ const Home = ({ setCategory }) => {
         <div
           className={style.card_option}
           onClick={() => {
-            setCategory("Vegeterian");
-            setflag(true);
+            history.push("/Categories/Vegeterian");
           }}
         >
           <img
@@ -114,4 +111,5 @@ const Home = ({ setCategory }) => {
     </div>
   );
 };
+
 export default Home;

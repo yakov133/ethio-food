@@ -2,31 +2,32 @@ import React, { useEffect, useState } from "react";
 import style from "./CSS/categories.module.css";
 import axios from "axios";
 import { MdReadMore } from "react-icons/md";
-import { Redirect } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 
-const Categories = ({ getCategory, setCategory, setDetails }) => {
+const Categories = () => {
   // הגדרת ה-API URL פעם אחת בראש הקומפוננטה
   const API_URL = process.env.REACT_APP_API_URL || "https://ethio-food-api.onrender.com";
   
   const [recipes, setRecipse] = useState([]);
   const [imageFlag, setimageFlag] = useState(false);
-  const [flag, setflag] = useState(false);
   const [spinner, setspinner] = useState(true);
+  const history = useHistory();
+  const { category } = useParams();
 
   let h1_category;
-  if (getCategory() === "Milk") {
+  if (category === "Milk") {
     h1_category = "חלבי";
-  } else if (getCategory() === "Meat") {
+  } else if (category === "Meat") {
     h1_category = "בשרי";
-  } else if (getCategory() === "Vegan") {
+  } else if (category === "Vegan") {
     h1_category = "טבעוני";
   } else {
     h1_category = "צמחוני";
   }
 
   useEffect(() => {
-    const URL = `${API_URL}/categories/${getCategory()}`;
+    const URL = `${API_URL}/categories/${category}`;
     
     axios
       .get(URL)
@@ -40,7 +41,7 @@ const Categories = ({ getCategory, setCategory, setDetails }) => {
         console.log("Error fetching categories:", err);
         setspinner(false);
       });
-  }, [getCategory]);
+  }, [category]);
 
   useEffect(() => {
     if (!imageFlag && recipes.length > 0) {
@@ -76,10 +77,6 @@ const Categories = ({ getCategory, setCategory, setDetails }) => {
     }
   };
 
-  if (flag) {
-    return <Redirect to="/Details" />;
-  }
-
   return (
     <div className={style.info}>
       <h1 className={style.h1_style}>קטגורית {h1_category}</h1>
@@ -104,8 +101,7 @@ const Categories = ({ getCategory, setCategory, setDetails }) => {
                   title="למתכון"
                   className={style.icon}
                   onClick={() => {
-                    setDetails(recip.id);
-                    setflag(true);
+                    history.push(`/Details/${recip.id}`);
                   }}
                 />
               </p>

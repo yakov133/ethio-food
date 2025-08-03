@@ -46,12 +46,12 @@ function App() {
       
         <Switch>
           <Route exact path="/" render={() => <Home setCategory={setCategory}/>} />
-          <Route exact path="/AllRecips" render={() => <AllRecips setDetails={setDetails} />} />
+          <Route exact path="/AllRecips" render={() => <AllRecips />} />
           <Route exact path="/NewRecipe" render={() => <NewRecipe userLogedIn={userLogedIn} />} />
           <Route exact path="/MyRecipe" render={() => <MyRecipe userLogedIn={userLogedIn} setrecipUpdate={setrecipUpdate}/>} />
           <Route exact path="/About" render={() => <About />} />
-          <Route exact path="/Details" render={() => <Details userLogedIn={userLogedIn} getDetails={getDetails} setDetails={setDetails}/>} />
-          <Route exact path="/Categories" render={() => <Categories getCategory={getCategory} setCategory={setCategory} setDetails={setDetails} />} />
+          <Route exact path="/Details/:id" render={() => <Details userLogedIn={userLogedIn} />} />
+          <Route exact path="/Categories/:category" render={() => <Categories />} />
           <Route exact path="/Update" render={() => <Update getrecipUpdate={getrecipUpdate}/>} />
           <Route exact path="/Admin" render={() => <Admin />} />
 

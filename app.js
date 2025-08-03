@@ -33,6 +33,10 @@ app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+  // אם זה לא API route, תחזיר את index.html של React
+  if (!req.path.startsWith('/api') && !req.path.startsWith('/users')) {
+    return res.sendFile(path.resolve(__dirname, 'client/build', 'index.html'));
+  }
   next(createError(404));
 });
 
