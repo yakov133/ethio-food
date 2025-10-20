@@ -1,3 +1,11 @@
+.images_container {
+  display: flex;
+  gap: 20px; /* מרווח בין התמונות */
+  justify-content: center; /* מרכז את התמונות */
+  align-items: center;
+  flex-wrap: wrap; /* אם צריך, התמונות יעברו שורה במסכים קטנים */
+}
+
 .img {
   border-radius: 50%;
   width: 20rem;
