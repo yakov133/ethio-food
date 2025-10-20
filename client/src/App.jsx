@@ -57,7 +57,9 @@ function App() {
 
           <Route component={() => <PageNotFound />} />
         </Switch>
-        <footer >&copy;  <a className={style.linkdin} href="https://www.linkedin.com/in/yakov-kassa-406636116/" target="_blank" rel="noopener noreferrer">Yakov Kassa</a>
+        <footer >&copy;  
+        <a className={style.linkdin} href="https://www.linkedin.com/in/yakov-kassa-406636116/" target="_blank" rel="noopener noreferrer">Yakov Kassa</a>
+        &nbsp; 
         <a className={style.linkdin} href="https://www.linkedin.com/in/ofek-saadon-369067194/" target="_blank" rel="noopener noreferrer">Ofek Saadon</a> 
         <a href=" https://github.com/yakov133/ethio-food" target="_blank" rel="noopener noreferrer"><AiFillGithub  className={style.icons}/></a> </footer>
       </div>
