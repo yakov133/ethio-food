@@ -114,6 +114,8 @@ const AllRecips = ({ setDetails }) => {
             onChange={handelSearch}
           />
         </div>
+        
+      <video className={style.iframe} src={mainVideo} autoPlay loop muted />
 
         <div className={style.order}>
           {!search &&
@@ -167,7 +169,6 @@ const AllRecips = ({ setDetails }) => {
           ) : []}
         </div>
       </div>
-      <video className={style.iframe} src={mainVideo} autoPlay loop muted />
     </div>
   );
 };
