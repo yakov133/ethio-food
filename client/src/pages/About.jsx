@@ -20,8 +20,10 @@ const About = () => {
           <div>
           <p>ובלי מילים מיותרות שיהיה לכם בתאבון!</p>
           <p>אופק סעדון ויעקב קסה</p> 
-          <img className={style.img} src="https://ibb.co/7JMK8byF" alt="אופק תמונת פרופיל"/>
-          <img className={style.img} src="https://i.ibb.co/fYbLXPQ/passport.jpg" alt="תמונת פרופיל"/>
+          <div className={style.images_container}>
+              <img className={style.img} src="https://i.ibb.co/6R9FVNs5/profile.png" alt="אופק תמונת פרופיל"/>
+              <img className={style.img} src="https://i.ibb.co/fYbLXPQ/passport.jpg" alt="תמונת פרופיל"/>
+           </div>
           </div>
         </div>
       </div>
