@@ -19,7 +19,8 @@ const About = () => {
           </div>
           <div>
           <p>ובלי מילים מיותרות שיהיה לכם בתאבון!</p>
-          <p>יעקב קסה</p>
+          <p>אופק סעדון ויעקב קסה</p> 
+          <img className={style.img} src="https://ibb.co/7JMK8byF" alt="אופק תמונת פרופיל"/>
           <img className={style.img} src="https://i.ibb.co/fYbLXPQ/passport.jpg" alt="תמונת פרופיל"/>
           </div>
         </div>
