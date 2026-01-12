@@ -17,7 +17,7 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
             <Link className={style.link_nav} to="/About">
               אודות
             </Link>
-            {userLogedIn.email === "yakov133@walla.com"?
+            {(userLogedIn.email === "yakov133@walla.com"||userLogedIn.email === "ofekavi1104@gmail.com")?
             <Link className={style.link_nav} to="/Admin">
             ניהול
           </Link>
@@ -104,7 +104,7 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
             <Link onClick={()=>sethumburgerlinks(!humburgerlinks)} to="/About">
               אודות
             </Link>
-            {userLogedIn.email === "yakov133@walla.com"?
+            {(userLogedIn.email === "yakov133@walla.com"||userLogedIn.email === "ofekavi1104@gmail.com")?
             <Link onClick={()=>sethumburgerlinks(!humburgerlinks)} to="/Admin">
             ניהול
           </Link>
