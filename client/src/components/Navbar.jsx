@@ -47,7 +47,7 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
               }}
               className={style.sign_out}
             >
-              <AiOutlinePoweroff />
+              יציאה
             </button>
           </nav>
         ) : (
@@ -62,7 +62,7 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
               בית     
             </Link>
             <button onClick={() => setModal(true)} className={style.sign_out}>
-              <FaRegUser />
+              התחברות/הרשמה
             </button>
           </nav>
         )}
@@ -84,8 +84,9 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
                 setuserLogedIn(false);
                 localStorage.clear();
                 return <Redirect to="/" />
-            }}>
-              <AiOutlinePoweroff />
+            }}
+            className={style.sign_out_btn_mobile}>
+              יציאה
             </button>
 
             <Link onClick={()=>sethumburgerlinks(!humburgerlinks)} to="/">
@@ -104,7 +105,7 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
               אודות
             </Link>
             {userLogedIn.email === "yakov133@walla.com"?
-            <Link className={style.link_nav} to="/Admin">
+            <Link onClick={()=>sethumburgerlinks(!humburgerlinks)} to="/Admin">
             ניהול
           </Link>
             :
@@ -122,8 +123,8 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
             <Link onClick={()=>sethumburgerlinks(!humburgerlinks)} to="/">
               בית     
             </Link>
-            <button onClick={() => setModal(true)} >
-              <FaRegUser />
+            <button onClick={() => setModal(true)} className={style.sign_in_btn_mobile}>
+              התחברות/הרשמה
             </button>
           </nav>
         )}

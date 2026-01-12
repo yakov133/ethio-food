@@ -48,7 +48,37 @@
 .sign_out:hover{
   background-color: #9a4e08;
   color: white;
-  border-radius: 50%;
+  border-radius: 80%;
+}
+
+/* כפתור יציאה - רקע לבן/אפור על כל הטקסט */
+.nav_user_loged_in .sign_out {
+  background-color: #f5f5f5;
+  color: #fd7c04;
+  padding: 8px 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.nav_user_loged_in .sign_out:hover {
+  background-color: #e0e0e0;
+  color: #fd7c04;
+  border-radius: 25px;
+}
+
+/* כפתור התחברות/הרשמה - רקע לבן/אפור על כל הטקסט */
+.nav_no_user .sign_out {
+  background-color: #f5f5f5;
+  color: #fd7c04;
+  padding: 8px 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.nav_no_user .sign_out:hover {
+  background-color: #e0e0e0;
+  color: #fd7c04;
+  border-radius: 25px;
 }
 .nav_no_user {
   overflow: hidden;
@@ -155,6 +185,40 @@ textarea{
     z-index: 1;
   }
   
+}
+
+/* כפתור התחברות בתפריט מובייל */
+.sign_in_btn_mobile {
+  background-color: #f5f5f5;
+  color: #fd7c04;
+  padding: 8px 16px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  margin-top: 10px;
+}
+.sign_in_btn_mobile:hover {
+  background-color: #e0e0e0;
+  color: #fd7c04;
+}
+
+/* כפתור יציאה בתפריט מובייל */
+.sign_out_btn_mobile {
+  background-color: #f5f5f5;
+  color: #fd7c04;
+  padding: 8px 16px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  margin-top: 10px;
+}
+.sign_out_btn_mobile:hover {
+  background-color: #e0e0e0;
+  color: #fd7c04;
 }
 
 @media screen and (max-width: 980px) {
