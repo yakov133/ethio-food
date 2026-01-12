@@ -21,6 +21,7 @@ const Update = ({ getrecipUpdate }) => {
   const [Ingredients, setIngredients] = useState("");
   const [Instructions, setInstructions] = useState("");
   const [Nots, setNots] = useState("");
+  const [mealTimes, setMealTimes] = useState([]); // מערך של זמני אכילה
   const [flag, setflag] = useState(false);
   const [loading, setLoading] = useState(false);
   
@@ -35,11 +36,28 @@ const Update = ({ getrecipUpdate }) => {
       setIngredients(obj.Ingredients);
       setInstructions(obj.Instructions);
       setNots(obj.Nots || "");
+      setMealTimes(obj.mealTimes || []); // טעינת זמני אכילה קיימים
     }
   }, [getrecipUpdate]);
 
+  const handleMealTimeChange = (mealTime) => {
+    setMealTimes(prev => {
+      if (prev.includes(mealTime)) {
+        return prev.filter(time => time !== mealTime);
+      } else {
+        return [...prev, mealTime];
+      }
+    });
+  };
+
   const loadtoserver = (e) => {
     e.preventDefault();
+    
+    // בדיקה שצריך לבחור לפחות זמן אכילה אחד
+    if (mealTimes.length === 0) {
+      alert("אנא בחר לפחות זמן אכילה אחד");
+      return;
+    }
     
     if (window.confirm("יש לאשר את העדכון")) {
       setLoading(true);
@@ -52,7 +70,8 @@ const Update = ({ getrecipUpdate }) => {
         category,
         Ingredients,
         Instructions,
-        Nots
+        Nots,
+        mealTimes // הוספת זמני אכילה לעדכון
       };
       
       axios
@@ -170,7 +189,54 @@ const Update = ({ getrecipUpdate }) => {
             <label htmlFor="Meat">בשרי:</label>
             <br />
           </div>
+          <br />
 
+          <div>
+            <p>מתי מומלץ לאכול את המתכון? (ניתן לבחור כמה אפשרויות):</p>
+            <input
+              type="checkbox"
+              id="morning"
+              value="בוקר"
+              checked={mealTimes.includes("בוקר")}
+              onChange={() => handleMealTimeChange("בוקר")}
+              disabled={loading}
+            />
+            <label htmlFor="morning">בוקר</label>
+            <br />
+
+            <input
+              type="checkbox"
+              id="lunch"
+              value="צהריים"
+              checked={mealTimes.includes("צהריים")}
+              onChange={() => handleMealTimeChange("צהריים")}
+              disabled={loading}
+            />
+            <label htmlFor="lunch">צהריים</label>
+            <br />
+
+            <input
+              type="checkbox"
+              id="dinner"
+              value="ערב"
+              checked={mealTimes.includes("ערב")}
+              onChange={() => handleMealTimeChange("ערב")}
+              disabled={loading}
+            />
+            <label htmlFor="dinner">ערב</label>
+            <br />
+
+            <input
+              type="checkbox"
+              id="snacks"
+              value="נשנושים וקינוחים"
+              checked={mealTimes.includes("נשנושים וקינוחים")}
+              onChange={() => handleMealTimeChange("נשנושים וקינוחים")}
+              disabled={loading}
+            />
+            <label htmlFor="snacks">נשנושים וקינוחים</label>
+            <br />
+          </div>
           <br />
 
           <div>

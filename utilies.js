@@ -155,6 +155,18 @@ function updateRecipe(req, res) {
 function newRecipe(req,res){
   // console.log(req.file.filename);
   // console.log(req.body);
+  
+  // פרסור של mealTimes מ-JSON string למערך
+  let mealTimesArray = [];
+  if (req.body.mealTimes) {
+    try {
+      mealTimesArray = JSON.parse(req.body.mealTimes);
+    } catch (e) {
+      console.error("Error parsing mealTimes:", e);
+      mealTimesArray = [];
+    }
+  }
+  
   const myobj = {
     title:req.body.title,
     name:req.body.name,
@@ -162,6 +174,7 @@ function newRecipe(req,res){
     Ingredients:req.body.Ingredients,
     Instructions:req.body.Instructions,
     Nots:req.body.Nots,
+    mealTimes: mealTimesArray, // מערך של זמני אכילה
     src:req.file.filename,
     comments:[],
     id:uuidv4(),

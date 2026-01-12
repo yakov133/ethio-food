@@ -1,5 +1,5 @@
 .info{
-  margin-top: 4%;
+  margin-top: 100px; /* מרווח גדול יותר כדי שהתוכן לא יוסתר מתחת ל-navbar */
   margin-bottom: 3%;
  }
  .h1_style{

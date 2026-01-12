@@ -4,7 +4,7 @@
   margin: 0;
 }
 .info{
- margin-top: 3.5%;
+ margin-top: 100px; /* מרווח גדול יותר כדי שהתוכן לא יוסתר מתחת ל-navbar */
 }
 .h1_style{
   text-align: center;
@@ -20,17 +20,21 @@
     margin-bottom: 1  0px;
     filter: drop-shadow(1px 2px 6px gray);
     font-weight: bold;
+    height: auto;
+    min-height: 45px; /* הקטנתי את הגובה המינימלי */
+    max-height: 60px; /* הקטנתי את הגובה המקסימלי */
+    direction: rtl; /* כיוון עברית מימין לשמאל */
 }
 
 .link_nav {
     text-decoration: none;
-    float: left;
+    float: right; /* שינוי ל-right כי עברית היא RTL */
     /* display: block; */
     color: #f2f2f2;
     text-align: center;
-    padding: 7px 8px;
-    padding-left: 8%;
-    font-size: 22px;
+    padding: 5px 6px; /* הקטנתי את ה-padding */
+    padding-right: 6%; /* שינוי ל-padding-right */
+    font-size: 18px; /* הקטנתי את הגופן */
 }
 .link_nav:hover {
   text-decoration: underline;
@@ -39,7 +43,7 @@
 }
 .sign_out {
   color: #fd7c04;
-  float: right;
+  float: left; /* שינוי ל-left כי עברית היא RTL */
   margin: 1%;
   font-size: 20px;
   border: none;
@@ -89,16 +93,20 @@
     z-index: 1;
     margin-bottom: 14%;
     filter: drop-shadow(1px 2px 4px gray);
+    height: auto;
+    min-height: 45px; /* הקטנתי את הגובה המינימלי */
+    max-height: 60px; /* הקטנתי את הגובה המקסימלי */
+    direction: rtl; /* כיוון עברית מימין לשמאל */
 }
 .nav_no_user .link_nav {
   text-decoration: none;
-  float: left;
+  float: right; /* שינוי ל-right כי עברית היא RTL */
   display: block;
   color: #f2f2f2;
   text-align: center;
-  padding: 14px 16px;
-  padding-left: 20rem;
-  font-size: 19px;
+  padding: 8px 10px; /* הקטנתי את ה-padding */
+  padding-right: 5%; /* שינוי ל-padding-right */
+  font-size: 16px; /* הקטנתי את הגופן */
 }
 .nav_no_user .link_nav:hover {
   text-decoration: underline;
@@ -184,7 +192,33 @@ textarea{
     position: fixed;
     z-index: 1;
   }
-  
+}
+
+/* הקטנת גודל ה-navbar במסכים קטנים */
+@media screen and (max-width: 1600px) {
+  .link_nav {
+    font-size: 18px;
+    padding: 5px 6px;
+    padding-right: 6%; /* שינוי ל-padding-right */
+  }
+  .nav_user_loged_in .sign_out,
+  .nav_no_user .sign_out {
+    font-size: 16px;
+    padding: 6px 12px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .link_nav {
+    font-size: 16px;
+    padding: 4px 5px;
+    padding-right: 5%; /* שינוי ל-padding-right */
+  }
+  .nav_user_loged_in .sign_out,
+  .nav_no_user .sign_out {
+    font-size: 14px;
+    padding: 5px 10px;
+  }
 }
 
 /* כפתור התחברות בתפריט מובייל */

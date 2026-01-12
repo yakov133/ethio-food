@@ -1,6 +1,7 @@
 .info{
-  margin-top: 3%;
+  margin-top: 80px; /* מרווח כדי שהתוכן לא יוסתר מתחת ל-navbar */
   margin-bottom: 3%;
+  padding-top: 15px; /* מרווח נוסף למעלה */
  }
  .h1_style{
    text-align: center;
@@ -132,7 +133,16 @@
     }
 }
 
+@media screen and (max-width: 1024px) {
+  .info {
+    margin-top: 70px; /* מרווח למסכים קטנים */
+  }
+}
+
 @media screen and (max-width: 760px) {
+  .info {
+    margin-top: 60px; /* מרווח למובייל */
+  }
   .order {
     display: grid;
     grid-template-columns: repeat(1,100%);

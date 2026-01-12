@@ -158,6 +158,11 @@ const Details = ({ userLogedIn }) => {
         <div>
           <section > מתכון: {recipe.title}</section>
           <section > נכתב על ידי: {recipe.name}</section>
+          {recipe.mealTimes && recipe.mealTimes.length > 0 && (
+            <section>
+              מומלץ לאכילה: {recipe.mealTimes.join(", ")}
+            </section>
+          )}
         </div>
       </div>
       <main className={style.main}>

@@ -14,8 +14,17 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
   return <div>
       {userLogedIn ? (
           <nav className={style.nav_user_loged_in}>
-            <Link className={style.link_nav} to="/About">
-              אודות
+            <Link className={style.link_nav} to="/">
+              בית     
+            </Link>
+            <Link className={style.link_nav} to="/AllRecips">
+              כל המתכונים     
+            </Link>
+            <Link className={style.link_nav} to="/MyRecipe">
+              המתכונים שלי 
+            </Link>
+            <Link className={style.link_nav} to="/NewRecipe">
+              מתכון חדש
             </Link>
             {(userLogedIn.email === "yakov133@walla.com"||userLogedIn.email === "ofekavi1104@gmail.com")?
             <Link className={style.link_nav} to="/Admin">
@@ -23,20 +32,8 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
           </Link>
             :
             ""}
-
-            <Link className={style.link_nav} to="/NewRecipe">
-              מתכון חדש
-            </Link>
-
-            <Link className={style.link_nav} to="/MyRecipe">
-              המתכונים שלי 
-            </Link>
-            
-            <Link className={style.link_nav} to="/AllRecips">
-              כל המתכונים     
-            </Link>
-            <Link className={style.link_nav} to="/">
-              בית     
+            <Link className={style.link_nav} to="/About">
+              אודות
             </Link>
             
             <button
@@ -52,14 +49,14 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
           </nav>
         ) : (
           <nav className={style.nav_no_user}>
-           <Link className={style.link_nav} to="/About">
-              אודות
+            <Link className={style.link_nav} to="/">
+              בית     
             </Link>
             <Link className={style.link_nav} to="/AllRecips">
               כל המתכונים     
             </Link>
-            <Link className={style.link_nav} to="/">
-              בית     
+            <Link className={style.link_nav} to="/About">
+              אודות
             </Link>
             <button onClick={() => setModal(true)} className={style.sign_out}>
               התחברות/הרשמה
@@ -114,14 +111,14 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
           </nav>
         ) : (
           <nav className={style.nav_phone} >
-           <Link onClick={()=>sethumburgerlinks(!humburgerlinks)} to="/About">
-              אודות
+           <Link onClick={()=>sethumburgerlinks(!humburgerlinks)} to="/">
+              בית     
             </Link>
             <Link onClick={()=>sethumburgerlinks(!humburgerlinks)} to="/AllRecips">
               כל המתכונים     
             </Link>
-            <Link onClick={()=>sethumburgerlinks(!humburgerlinks)} to="/">
-              בית     
+            <Link onClick={()=>sethumburgerlinks(!humburgerlinks)} to="/About">
+              אודות
             </Link>
             <button onClick={() => setModal(true)} className={style.sign_in_btn_mobile}>
               התחברות/הרשמה
