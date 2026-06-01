@@ -66,3 +66,4 @@ router.patch("/recipeApprove/:id", (req, res) => {
 });
 
 module.exports = router;
+
