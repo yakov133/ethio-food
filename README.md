@@ -106,5 +106,3 @@ Recommended Plugins:
 * install code spell checker - finds spelling error
 
 
-
-
