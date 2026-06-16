@@ -1,108 +1,274 @@
-# React / Express App
+# Ethio Food
 
-This application is an all-in-one application that contains react-client app and and express server.
-The application is made for demo purposes only,
+פלטפורמה קהילתית לשיתוף, חיפוש וניהול מתכונים מהמטבח האתיופי.  
+המערכת נבנתה כדי לשמר ידע קולינרי, לאפשר למשתמשים להעלות מתכונים עם תמונות, ולנהל תהליך אישור לפני פרסום המתכונים לכלל המשתמשים.
 
-The following is a step-by-step manual for forking and deploying this app in Heroku cloud provider.
+## תוכן עניינים
 
-## Step by Step Manual
+- [על הפרויקט](#על-הפרויקט)
+- [יכולות מרכזיות](#יכולות-מרכזיות)
+- [טכנולוגיות](#טכנולוגיות)
+- [מבנה הפרויקט](#מבנה-הפרויקט)
+- [התקנה והרצה מקומית](#התקנה-והרצה-מקומית)
+- [משתני סביבה](#משתני-סביבה)
+- [API מרכזי](#api-מרכזי)
+- [פריסה](#פריסה)
+- [צוות הפיתוח](#צוות-הפיתוח)
 
-### Fork Skeleton App
-1. Login to your github account
-2. Goto to https://github.com/yavivi/react-express-app
-3. Fork the project to your github account by clicking on the "Fork" button in the upper right corner.
-Wait for the project to appear in your account
-4. In the project settings, rename the repository name to your application name
+## על הפרויקט
 
-### Project Structure:
-```
-react-express-app             <-- server project root (nodejs/express)
-   \__ client                 <-- client project root (react)
-          \__ package.json
-   package.json
-```
+Ethio Food הוא יישום Full Stack המבוסס על React בצד הלקוח ו-Express בצד השרת.  
+המערכת מאפשרת צפייה במתכונים, סינון לפי קטגוריות, חיפוש, הרשמה והתחברות, העלאת מתכונים אישיים, כתיבת תגובות וניהול מתכונים שממתינים לאישור מנהל.
 
-### Clone and Install project libraries
+הפרויקט שם דגש על:
 
-On you PC terminal (or Git Bash):
-```
-$ git clone https://github.com/<your-github-user>/<your-repo-name>
+- שימור מתכונים ומסורת קולינרית של הקהילה האתיופית.
+- חוויית משתמש פשוטה בעברית.
+- הפרדה בין לקוח, שרת, בסיס נתונים ואימות משתמשים.
+- הרשאות בסיסיות למשתמשים רגילים ולמנהלי מערכת.
 
-Install server dependencies:
-$ cd <your-app-name>
-$ npm install
+## יכולות מרכזיות
 
-Install client dependencies:
-$ cd client
-$ npm install
-```
+- צפייה בכל המתכונים שאושרו לפרסום.
+- חיפוש מתכונים לפי שם, מקור, מצרכים, הוראות והערות.
+- סינון מתכונים לפי קטגוריות: בשרי, חלבי, טבעוני וצמחוני.
+- עמוד פרטים מלא לכל מתכון, כולל תמונה, מצרכים, הוראות הכנה, הערות ותגובות.
+- הרשמה והתחברות באמצעות Firebase Authentication.
+- העלאת מתכון חדש עם תמונה, קטגוריה וזמני אכילה מומלצים.
+- אזור אישי למשתמשים: צפייה, עריכה ומחיקה של המתכונים שלהם.
+- אזור ניהול למנהלים: צפייה במתכונים שממתינים לאישור, אישור או מחיקה.
+- שמירת נתונים ב-MongoDB.
+- העלאת תמונות לשרת עם בדיקות סוג קובץ וגודל קובץ.
 
-### Run both Client and Server Locally
-While developing, you can start both react and nodejs servers in the following way:
+## טכנולוגיות
 
-First, you need to add a local ENV file that points the client to the server domain in development.
+### Client
 
-Create a file called **.env.development.local** under the client directory and add the following property:
-```
-REACT_APP_DOMAIN=localhost:3001
-```
-**NOTE:** The file must start with a dot (.)
+- React 17
+- Vite
+- React Router
+- Axios
+- React Icons
+- React Spinners
 
+### Server
 
-Then, go back to the root directory of the project:
-```
-$ cd ..
-```
+- Node.js
+- Express
+- MongoDB
+- Firebase Identity Toolkit
+- Multer
+- CORS
+- dotenv
 
-Start both server and client concurrently:
-```
-$ npm run all
-```
-* Client (React App) is at http://localhost:3000
-* Server (Express/NodeJS) is at http://localhost:3001
+## מבנה הפרויקט
 
-If you wish to start server only:
-```
-$ npm start
-```
-If you wish to start client only:
-```
-$ npm run client
-```
-
-Client and Server should refresh when you change you code
-
-## Creating the Application in Heroku
-1. Create an account in Heroku Cloud (https://signup.heroku.com)
-You should verify the account by the provided email and set a new password.
-You should reach the Heroku Welcome Screen at: https://dashboard.heroku.com/apps
-2. Create your own Application and give it a name
-3. In Deployment Method, choose "Connect to GitHub"
-4. Click the "Connect to GitHub" button at the bottom
-5. Authorize Heroku to access your repositories
-6. Search your application repo among your GitHub repository list and click "Connect"
-
-## Setting up you Application FQDN
-Whan the applicatin starts it "fetches" a list of users from the backend (this is a fake hard-coded list just for demo purposes).
-In order for the application be able to "fetch" the list from the server, you should set the application FQDN in the .env file located under the client directory:
-```
-REACT_APP_DOMAIN=<my-heroku-application-name>.herokuapp.com
-```
-After you change the .env file, commit and push your changes:
-```
-$ git commit -a -m "set application FQDN in env file"
-$ git push
+```text
+ethio-food-main/
+├── app.js                 # הגדרת שרת Express, CORS ונתיבי API
+├── auth.js                # אימות Firebase והרשאות משתמשים
+├── db.js                  # חיבור ל-MongoDB
+├── utilies.js             # לוגיקת מתכונים, תמונות, תגובות ואישורים
+├── routes/
+│   ├── index.js           # נתיבי המתכונים והתמונות
+│   └── users.js           # נתיב דמו למשתמשים
+├── uploads/               # תמונות שהועלו דרך המערכת
+├── public/                # קבצים סטטיים של השרת
+├── client/
+│   ├── src/
+│   │   ├── pages/         # עמודי האפליקציה
+│   │   ├── components/    # רכיבי ממשק משתמש
+│   │   └── api.js         # הגדרת API ואימות בצד הלקוח
+│   ├── public/
+│   └── package.json
+├── package.json           # תלות ופקודות צד שרת
+└── Procfile               # הגדרת הרצה לסביבת ענן תומכת
 ```
 
-## Deploying the Application
-1. In the application dashboard (Deploy Tab) Click "Deploy Branch" button.
-2. Wait for the application to deploy successfully.
-3. Click the "View" button to access it on the web.
-4. If you see the list of users: "John Doe" and "Jane Doe" on the screen, your are all set!
+## התקנה והרצה מקומית
 
-## VS Code
-Recommended Plugins:
-* install eslint plugin - find problems in your code enforces proper formatting 
-* install code spell checker - finds spelling error
+### דרישות מקדימות
 
+- Node.js בגרסה `16.20.0` ומעלה.
+- npm.
+- MongoDB זמין בענן או מקומית.
+- פרויקט Firebase פעיל עבור הרשמה והתחברות.
 
+### התקנת צד שרת
+
+```bash
+npm install
+```
+
+צרו קובץ `.env` בתיקיית השורש והגדירו את משתני הסביבה הדרושים. פירוט מלא מופיע בסעיף [משתני סביבה](#משתני-סביבה).
+
+הרצת השרת:
+
+```bash
+npm run dev
+```
+
+ברירת המחדל של השרת:
+
+```text
+http://localhost:3001
+```
+
+בדיקת תקינות:
+
+```text
+http://localhost:3001/health
+```
+
+### התקנת צד לקוח
+
+פתחו טרמינל נוסף:
+
+```bash
+cd client
+npm install
+```
+
+צרו קובץ `.env` בתוך תיקיית `client` והגדירו את כתובת ה-API:
+
+```env
+VITE_API_URL=http://localhost:3001
+```
+
+הרצת הלקוח:
+
+```bash
+npm start
+```
+
+ברירת המחדל של Vite:
+
+```text
+http://localhost:5173
+```
+
+### פקודות שימושיות
+
+```bash
+# Server
+npm start
+npm run dev
+
+# Client
+cd client
+npm start
+npm run build
+npm test
+npm run preview
+```
+
+## משתני סביבה
+
+### Server `.env`
+
+```env
+PORT=3001
+MONGODB_URL=<your-mongodb-connection-string>
+MONGODB_DB_NAME=ethyopianfood
+CLIENT_ORIGINS=http://localhost:5173
+FIREBASE_API_KEY=<your-firebase-api-key>
+ADMIN_EMAILS=admin@example.com,another-admin@example.com
+```
+
+| משתנה | חובה | הסבר |
+| --- | --- | --- |
+| `PORT` | לא | הפורט שעליו שרת ה-API ירוץ. ברירת מחדל: `3001`. |
+| `MONGODB_URL` | כן | כתובת התחברות ל-MongoDB. |
+| `MONGODB_DB_NAME` | לא | שם בסיס הנתונים. ברירת מחדל: `ethyopianfood`. |
+| `CLIENT_ORIGINS` | מומלץ | רשימת כתובות לקוח שמורשות לפנות לשרת, מופרדות בפסיקים. |
+| `FIREBASE_API_KEY` | כן | מפתח Firebase המשמש לאימות אסימוני משתמשים. |
+| `ADMIN_EMAILS` | לא | רשימת כתובות אימייל של מנהלים, מופרדות בפסיקים. |
+
+### Client `client/.env`
+
+```env
+VITE_API_URL=http://localhost:3001
+VITE_FIREBASE_API_KEY=<your-firebase-api-key>
+```
+
+הפרויקט תומך גם בשמות הישנים `REACT_APP_API_URL` ו-`REACT_APP_FIREBASE_API_KEY`, אך בפרויקט Vite מומלץ להשתמש במשתנים שמתחילים ב-`VITE_`.
+
+## API מרכזי
+
+| Method | Endpoint | הרשאה | תיאור |
+| --- | --- | --- | --- |
+| `GET` | `/health` | ציבורי | בדיקת תקינות לשרת. |
+| `GET` | `/recipes` | ציבורי | שליפת מתכונים שאושרו לפרסום. |
+| `GET` | `/recipes?includePending=true` | מנהל | שליפת כל המתכונים, כולל מתכונים שממתינים לאישור. |
+| `GET` | `/recipe/:id` | ציבורי / בעלים / מנהל | שליפת מתכון בודד. |
+| `GET` | `/categories/:category` | ציבורי | שליפת מתכונים לפי קטגוריה. |
+| `GET` | `/image/:newFileName` | ציבורי | שליפת תמונה שהועלתה לשרת. |
+| `POST` | `/recipe` | משתמש מחובר | יצירת מתכון חדש עם תמונה. |
+| `PATCH` | `/recipe/:id` | משתמש מחובר | עדכון מתכון או הוספת תגובה. |
+| `DELETE` | `/recipe/:id` | בעלים / מנהל | מחיקת מתכון. |
+| `GET` | `/recipe/user/:localId` | בעלים / מנהל | שליפת המתכונים של משתמש מסוים. |
+| `PATCH` | `/recipeApprove/:id` | מנהל | אישור מתכון לפרסום. |
+
+בקשות שמצריכות משתמש מחובר צריכות לכלול כותרת:
+
+```http
+Authorization: Bearer <firebase-id-token>
+```
+
+## העלאת תמונות
+
+המערכת תומכת בהעלאת תמונה אחת לכל מתכון:
+
+- סוגי קבצים מותרים: `jpg`, `png`, `webp`, `gif`.
+- גודל מקסימלי: `5MB`.
+- שמות הקבצים נוצרים בצד השרת כדי למנוע שימוש בשם קובץ לא בטוח.
+
+## פריסה
+
+ניתן לפרוס את הפרויקט כשני שירותים נפרדים:
+
+### API Server
+
+הגדרה מומלצת בשירות ענן כמו Render או Heroku:
+
+```bash
+npm install
+npm start
+```
+
+יש להגדיר בסביבת הענן את משתני הסביבה של צד השרת, במיוחד:
+
+- `MONGODB_URL`
+- `CLIENT_ORIGINS`
+- `FIREBASE_API_KEY`
+- `ADMIN_EMAILS`
+
+### Client
+
+הגדרה מומלצת כ-Static Site:
+
+```bash
+cd client
+npm install
+npm run build
+```
+
+תיקיית הפרסום:
+
+```text
+client/build
+```
+
+בפריסה יש להגדיר:
+
+```env
+VITE_API_URL=<production-api-url>
+VITE_FIREBASE_API_KEY=<firebase-api-key>
+```
+
+## צוות הפיתוח
+
+- Yakov Kassa
+- Ofek Saadon
+
+הפרויקט נבנה כחלק מתהליך למידה ופיתוח Full Stack, עם דגש על שימור ושיתוף מתכונים מהמטבח האתיופי.
