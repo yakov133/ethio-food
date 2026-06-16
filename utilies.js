@@ -131,7 +131,7 @@ async function addMenyRecpies(req, res) {
 
 async function getAllRecipes(req, res) {
   const collection = await getRecipesCollection();
-  // Public users see only approved recipes; admins can request the review queue.
+  // Public users see only approved recipes; admins can request every recipe.
   const filter = req.query.includePending === "true" && isAdminUser(req.user)
     ? {}
     : { adminApproval: true };
@@ -142,8 +142,12 @@ async function getAllRecipes(req, res) {
 async function getByCategories(req, res) {
   const category = requireCategory(req.params.category);
   const collection = await getRecipesCollection();
+  // Category pages follow the same visibility rules as the full recipe list.
+  const filter = req.query.includePending === "true" && isAdminUser(req.user)
+    ? { category }
+    : { category, adminApproval: true };
   const result = await collection
-    .find({ category, adminApproval: true })
+    .find(filter)
     .sort({ createdAt: -1, title: 1 })
     .toArray();
   return res.status(200).json(result);
@@ -342,4 +346,3 @@ module.exports = {
   deleteRecipe,
   recipeApprove,
 };
-

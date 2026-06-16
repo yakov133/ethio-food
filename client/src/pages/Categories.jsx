@@ -3,9 +3,10 @@ import style from "./CSS/categories.module.css";
 import { MdReadMore } from "react-icons/md";
 import { useHistory, useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
-import api, { getImageUrl } from "../api";
+import api, { getImageUrl, isAdminUser } from "../api";
+import AdminRecipeDeleteButton from "../components/AdminRecipeDeleteButton";
 
-const Categories = () => {
+const Categories = ({ userLogedIn }) => {
   const [recipes, setRecipse] = useState([]);
   const [spinner, setspinner] = useState(true);
   const history = useHistory();
@@ -24,9 +25,10 @@ const Categories = () => {
 
   useEffect(() => {
     setspinner(true);
-    // Category pages use the server filter so pending recipes stay hidden.
+    const adminQuery = isAdminUser(userLogedIn) ? "?includePending=true" : "";
+    // Admins can include pending category recipes; public users still see approved recipes only.
     api
-      .get(`/categories/${category}`)
+      .get(`/categories/${category}${adminQuery}`)
       .then((res) => {
         setspinner(false);
         setRecipse(res.data);
@@ -35,7 +37,12 @@ const Categories = () => {
         console.log("Error fetching categories:", err);
         setspinner(false);
       });
-  }, [category]);
+  }, [category, userLogedIn]);
+
+  const removeDeletedRecipe = (recipeId) => {
+    // Deleting from a category view should remove the card immediately from the screen.
+    setRecipse((currentRecipes) => currentRecipes.filter((recipe) => recipe.id !== recipeId));
+  };
 
   return (
     <div className={style.info}>
@@ -51,13 +58,16 @@ const Categories = () => {
               <p>
                 {recip.title} מאת: {recip.name}
               </p>
+              {isAdminUser(userLogedIn) && !recip.adminApproval && (
+                <p className={style.pendingBadge}>ממתין לאישור</p>
+              )}
               <br />
               <img
                 src={getImageUrl(recip.src)}
                 alt={`${recip.title} תמונה`}
                 loading="lazy"
               />
-              <p>
+              <div className={style.actions}>
                 <MdReadMore
                   title="למתכון"
                   className={style.icon}
@@ -65,7 +75,12 @@ const Categories = () => {
                     history.push(`/Details/${recip.id}`);
                   }}
                 />
-              </p>
+                <AdminRecipeDeleteButton
+                  userLogedIn={userLogedIn}
+                  recipeId={recip.id}
+                  onDeleted={removeDeletedRecipe}
+                />
+              </div>
             </div>
           ))}
         </div>

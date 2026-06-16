@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import style from "./CSS/admin.module.css";
-import { BsDisplay, BsTrash } from "react-icons/bs";
+import { BsDisplay } from "react-icons/bs";
 import { FcApproval } from "react-icons/fc";
 import ClipLoader from "react-spinners/ClipLoader";
 import { Redirect } from "react-router-dom";
 import api, { getImageUrl, isAdminUser } from "../api";
+import AdminRecipeDeleteButton from "../components/AdminRecipeDeleteButton";
 
 export const Admin = ({ userLogedIn }) => {
   const [recipes, setrecipes] = useState([]);
@@ -21,13 +22,11 @@ export const Admin = ({ userLogedIn }) => {
 
   function getRecpies() {
     api
-      // The server honors includePending only for verified admin users.
+      // Admin management needs both approved recipes and recipes waiting for approval.
       .get("/recipes?includePending=true")
       .then((res) => {
-        let temp = res.data;
-        temp = temp.filter((recip) => !recip.adminApproval);
         setspinner(false);
-        setrecipes(temp);
+        setrecipes(res.data);
       })
       .catch((err) => {
         console.error("Error fetching recipes:", err);
@@ -40,29 +39,13 @@ export const Admin = ({ userLogedIn }) => {
     setshowBtn(true);
   };
 
-  const deleteNewRecip = (recip) => {
-    if (window.confirm("נא לאשר מחיקה!")) {
-      deltefromDB(recip.id);
-    } else {
-      console.log("Deletion cancelled");
+  const removeDeletedRecipe = (recipeId) => {
+    // Keep the admin table and preview modal aligned after a successful delete.
+    setrecipes((currentRecipes) => currentRecipes.filter((recipe) => recipe.id !== recipeId));
+    if (sneakpic && sneakpic.id === recipeId) {
+      setsneakpic(null);
+      setshowBtn(false);
     }
-  };
-
-  const deltefromDB = (id) => {
-    api
-      .delete(`/recipe/${id}`)
-      .then((res) => {
-        if (res.status === 200) {
-          setspinner(true);
-          getRecpies();
-          setsneakpic(null);
-          setshowBtn(false);
-        }
-      })
-      .catch((err) => {
-        console.log("Error deleting recipe:", err);
-        alert("שגיאה במחיקת המתכון");
-      });
   };
 
   const recipApprove = (recip) => {
@@ -93,7 +76,7 @@ export const Admin = ({ userLogedIn }) => {
 
   return (
     <div className={style.space}>
-      <h1 className={style.preveiew}>ניהול של מתכונים חדשים</h1>
+      <h1 className={style.preveiew}>ניהול מתכונים</h1>
       <br />
 
       {showBtn && sneakpic && (
@@ -145,6 +128,7 @@ export const Admin = ({ userLogedIn }) => {
             <tr>
               <th>תמונה</th>
               <th>פרטים</th>
+              <th>סטטוס</th>
               <th>הסרה של המתכון</th>
               <th>אישור של המתכון</th>
             </tr>
@@ -167,17 +151,29 @@ export const Admin = ({ userLogedIn }) => {
                     className={style.icon}
                   />
                 </td>
+                <td>
+                  {recip.adminApproval ? (
+                    <span className={style.approvedText}>מאושר</span>
+                  ) : (
+                    <span className={style.pendingText}>ממתין לאישור</span>
+                  )}
+                </td>
                 <td title="מחיקה">
-                  <BsTrash
-                    onClick={() => deleteNewRecip(recip)}
-                    className={style.icon}
+                  <AdminRecipeDeleteButton
+                    userLogedIn={userLogedIn}
+                    recipeId={recip.id}
+                    onDeleted={removeDeletedRecipe}
                   />
                 </td>
                 <td title="אישור">
-                  <FcApproval
-                    onClick={() => recipApprove(recip)}
-                    className={style.icon}
-                  />
+                  {recip.adminApproval ? (
+                    <span className={style.approvedText}>כבר אושר</span>
+                  ) : (
+                    <FcApproval
+                      onClick={() => recipApprove(recip)}
+                      className={style.icon}
+                    />
+                  )}
                 </td>
               </tr>
             ))}

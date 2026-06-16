@@ -36,6 +36,16 @@ td img {
   background-color: transparent;
   border-radius: 0.5rem;
 }
+.approvedText {
+  color: #2f6f1f;
+  font-weight: bold;
+}
+
+.pendingText {
+  color: #844f1e;
+  font-weight: bold;
+}
+
 .preveiew {
   display: grid;
   justify-content: center;

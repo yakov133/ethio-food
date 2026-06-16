@@ -35,12 +35,12 @@ function App() {
 
         <Switch>
           <Route exact path="/" render={() => <Home />} />
-          <Route exact path="/AllRecips" render={() => <AllRecips />} />
+          <Route exact path="/AllRecips" render={() => <AllRecips userLogedIn={userLogedIn} />} />
           <Route exact path="/NewRecipe" render={() => <NewRecipe userLogedIn={userLogedIn} />} />
           <Route exact path="/MyRecipe" render={() => <MyRecipe userLogedIn={userLogedIn} />} />
           <Route exact path="/About" render={() => <About />} />
           <Route exact path="/Details/:id" render={() => <Details userLogedIn={userLogedIn} />} />
-          <Route exact path="/Categories/:category" render={() => <Categories />} />
+          <Route exact path="/Categories/:category" render={() => <Categories userLogedIn={userLogedIn} />} />
           {/* Update uses the recipe id in the URL so direct links and refreshes work. */}
           <Route exact path="/Update/:id" render={() => <Update userLogedIn={userLogedIn} />} />
           <Route exact path="/Admin" render={() => <Admin userLogedIn={userLogedIn} />} />

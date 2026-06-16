@@ -80,7 +80,7 @@ router.get("/recipes", optionalAuth, asyncHandler(getAllRecipes));
 
 router.get("/recipe/:id", optionalAuth, asyncHandler(getOneRecip));
 
-router.get("/categories/:category", asyncHandler(getByCategories));
+router.get("/categories/:category", optionalAuth, asyncHandler(getByCategories));
 
 router.patch("/recipe/:id", requireAuth, asyncHandler(updateRecipe));
 
@@ -95,4 +95,3 @@ router.delete("/recipe/:id", requireAuth, asyncHandler(deleteRecipe))
 router.patch("/recipeApprove/:id", requireAuth, requireAdmin, asyncHandler(recipeApprove));
 
 module.exports = router;
-

@@ -36,6 +36,20 @@
   color: white;
 }
 
+.actions {
+  align-items: center;
+  display: flex;
+  gap: 0.35rem;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+.pendingBadge {
+  color: #844f1e;
+  font-weight: bold;
+  margin: 0;
+}
+
 .spinner{
   display: grid;
   justify-content: center;
@@ -67,4 +81,3 @@
     margin-bottom: 10%;
   }
 }
-

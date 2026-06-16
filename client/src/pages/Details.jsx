@@ -2,11 +2,13 @@ import React, { useCallback, useEffect, useState } from "react";
 import categorystyle from "./CSS/categories.module.css";
 import style from "./CSS/details.module.css";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useParams } from "react-router-dom";
-import api, { getImageUrl } from "../api";
+import { useHistory, useParams } from "react-router-dom";
+import api, { getImageUrl, isAdminUser } from "../api";
+import AdminRecipeDeleteButton from "../components/AdminRecipeDeleteButton";
 
 const Details = ({ userLogedIn }) => {
   const { id } = useParams();
+  const history = useHistory();
   const [recipe, setrecipe] = useState(null);
   const [newComment, setnewComment] = useState("");
   const [loading, setLoading] = useState(true);
@@ -48,6 +50,11 @@ const Details = ({ userLogedIn }) => {
       .catch((err) => console.error(err));
   };
 
+  const handleAdminDelete = () => {
+    // After an admin deletes the current recipe there is no details page to display.
+    history.push("/AllRecips");
+  };
+
   if (loading) {
     return <section className={style.spinner}><ClipLoader size={150} /></section>;
   }
@@ -59,6 +66,16 @@ const Details = ({ userLogedIn }) => {
   return (
     <div className={categorystyle.info}>
       <h1 className={categorystyle.h1_style}>פרטים</h1>
+      {isAdminUser(userLogedIn) && !recipe.adminApproval && (
+        <p className={style.pendingBadge}>ממתין לאישור</p>
+      )}
+      <div className={style.adminActions}>
+        <AdminRecipeDeleteButton
+          userLogedIn={userLogedIn}
+          recipeId={recipe.id}
+          onDeleted={handleAdminDelete}
+        />
+      </div>
       <div className={style.firstDiv}>
         <img className={style.img} src={getImageUrl(recipe.src)} alt={`${recipe.title} תמונה`} />
         <div>
