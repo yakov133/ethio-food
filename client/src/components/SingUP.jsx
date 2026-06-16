@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import style from "./CSS/Modal.module.css";
 import { HashLoader } from "react-spinners";
 import { IoLogInOutline } from "react-icons/io5";
+import { FIREBASE_API_KEY } from "../api";
 
 
 const SignUp = ({ setuserLogedIn, setModal }) => {
@@ -16,8 +17,7 @@ const SignUp = ({ setuserLogedIn, setModal }) => {
     e.preventDefault();
     setspinner(true);
     setmessage("");
-    const API_KEY = "AIzaSyDBeYMdSNAk0KglYfPOg6DygYyinxRfugo";
-    const URL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`;
+    const URL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${FIREBASE_API_KEY}`;
     if (password1 === password2) {
       axios
         .post(URL, { email, password: password1 })

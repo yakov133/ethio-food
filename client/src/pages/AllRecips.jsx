@@ -1,92 +1,38 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import style from "./CSS/allRecips.module.css";
 import { MdReadMore } from "react-icons/md";
-import { useHistory, Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import mainVideo from "../videos/Tibs.mp4"
+import api, { getImageUrl } from "../api";
 
-const AllRecips = ({ setDetails }) => {
+const AllRecips = () => {
   document.title = "All Recips";
   const [recipes, setrecipes] = useState([]);
-  const [imageFlag, setimageFlag] = useState(false);
   const [search, setsearch] = useState(false);
-  const [flag, setflag] = useState(false);
   const history = useHistory();
-
-  // בדיקה שמשתנה הסביבה נטען כראוי
-  useEffect(() => {
-    console.log("API URL:", process.env.REACT_APP_API_URL);
-  }, []);
 
   useEffect(getRecpies, []);
 
-  useEffect(() => {
-    if (!imageFlag) {
-      let temp = [...recipes];
-      // temp = temp.filter(recip => recip.adminApproval);
-      for (let i = 0; i < temp.length; i++) {
-        getImage(temp, temp[i].src, i);
-      }
-    }
-  }, [recipes]);
-
   function getRecpies() {
-    // שימוש במשתנה סביבה או בכתובת קבועה אם אין משתנה
-    const API_URL = process.env.REACT_APP_API_URL || "https://ethio-food-api.onrender.com";
-    const URL = `${API_URL}/recipes`;
-    
-    axios
-      .get(URL)
+    // The server already filters unapproved recipes for public requests.
+    api
+      .get("/recipes")
       .then((res) => {
-        let temp = res.data;
-        temp = temp.filter(recip => recip.adminApproval);
-        setrecipes(temp);
+        setrecipes(res.data);
       })
       .catch((err) => console.error(err));
   }
 
-  const getImage = async (data, filename, i) => {
-    try {
-      // שימוש במשתנה סביבה גם בפונקציית התמונות
-      const API_URL = process.env.REACT_APP_API_URL || "https://ethio-food-api.onrender.com";
-      const URL = `${API_URL}/image/${filename}`;
-      
-      const res = await axios.get(URL, { responseType: "blob" });
-      
-      if (res.status === 200) {
-        const reader = new FileReader();
-        reader.readAsDataURL(res.data);
-        reader.onload = () => {
-          const imgeDataURL = reader.result;
-          data[i].src = imgeDataURL;
-          if (i + 1 === data.length) {
-            setimageFlag(true);
-            setTimeout(() => setrecipes(data), 1000);
-          }
-        };
-      } else {
-        console.log(`error status code: ${res.status}`);
-      }
-    } catch (error) {
-      console.error("Error fetching image:", error);
-    }
-  };
-
   const handelSearch = (e) => {
-    if (e.target.value !== "" && e.target.value !== " ") {
-      let tempRecipes = [];
-      for (let i = 0; i < recipes.length; i++) {
-        if (
-          recipes[i].title.includes(e.target.value) ||
-          recipes[i].name.includes(e.target.value) ||
-          recipes[i].Ingredients.includes(e.target.value) ||
-          recipes[i].Instructions.includes(e.target.value) ||
-          recipes[i].Nots.includes(e.target.value)
-        ) {
-          tempRecipes.push(recipes[i]);
-        }
-      }
+    const searchValue = e.target.value.trim().toLowerCase();
+    if (searchValue) {
+      // Search locally over the loaded approved recipes to avoid extra API calls.
+      const tempRecipes = recipes.filter((recipe) => (
+        [recipe.title, recipe.name, recipe.Ingredients, recipe.Instructions, recipe.Nots]
+          .some((value) => (value || "").toLowerCase().includes(searchValue))
+      ));
+
       if (tempRecipes.length > 0) {
         if (tempRecipes.length > 10) {
           setsearch(tempRecipes.slice(0, 10));
@@ -127,8 +73,9 @@ const AllRecips = ({ setDetails }) => {
                   </p>
                   <br />
                   <img
-                    src={recip.src.includes("data") ? recip.src : ""}
+                    src={getImageUrl(recip.src)}
                     alt={`${recip.title} תמונה`}
+                    loading="lazy"
                   />
                   <p>
                     <MdReadMore
@@ -149,8 +96,9 @@ const AllRecips = ({ setDetails }) => {
                     {recip.title} מאת {recip.name}
                   </p>
                   <img
-                    src={recip.src.includes("data") ? recip.src : ""}
+                    src={getImageUrl(recip.src)}
                     alt={`${recip.title} תמונה`}
+                    loading="lazy"
                   />
                   <p>
                     <MdReadMore

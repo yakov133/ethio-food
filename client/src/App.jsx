@@ -1,6 +1,6 @@
 import style from "./App.module.css";
-import React, { useEffect, useState } from "react";
-import { BrowserRouter, Switch, Route} from "react-router-dom";
+import React, { useState } from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import AllRecips from "./pages/AllRecips";
 import PageNotFound from "./pages/PageNotFound";
@@ -13,138 +13,49 @@ import Update from "./pages/Update";
 import { Admin } from "./pages/Admin";
 import { AiFillGithub } from "react-icons/ai";
 import Navbar from "./components/Navbar";
-
-
+import { getStoredAuth } from "./api";
 
 function App() {
-  const [userLogedIn, setuserLogedIn] = useState(false);
+  // Hydrate auth synchronously so protected routes do not flicker on refresh.
+  const [userLogedIn, setuserLogedIn] = useState(() => getStoredAuth() || false);
   const [modal, setModal] = useState(false);
   const [humburgerlinks, sethumburgerlinks] = useState(false);
 
-  let category = ""
-  const getCategory = ()=>category;
-  const setCategory = (str)=>category=str;
-  let details = "";
-  const getDetails = ()=>details;
-  const setDetails = (str)=>details=str;
-  let recipUpdate = "";
-  const getrecipUpdate = ()=>recipUpdate;
-  const setrecipUpdate = (obj)=>recipUpdate=obj;
-
-  useEffect(() => {
-    if (localStorage.getItem("auth")) {
-      setuserLogedIn(JSON.parse(localStorage.getItem("auth")));
-    }
-  }, []);
-  
   return (
     <BrowserRouter>
       <div>
+        <Navbar
+          userLogedIn={userLogedIn}
+          setuserLogedIn={setuserLogedIn}
+          modal={modal}
+          setModal={setModal}
+          humburgerlinks={humburgerlinks}
+          sethumburgerlinks={sethumburgerlinks}
+        />
 
-      <Navbar userLogedIn={userLogedIn} setuserLogedIn={setuserLogedIn} modal={modal} setModal={setModal} humburgerlinks={humburgerlinks} sethumburgerlinks={sethumburgerlinks}/>
-      
-      
         <Switch>
-          <Route exact path="/" render={() => <Home setCategory={setCategory}/>} />
+          <Route exact path="/" render={() => <Home />} />
           <Route exact path="/AllRecips" render={() => <AllRecips />} />
           <Route exact path="/NewRecipe" render={() => <NewRecipe userLogedIn={userLogedIn} />} />
-          <Route exact path="/MyRecipe" render={() => <MyRecipe userLogedIn={userLogedIn} setrecipUpdate={setrecipUpdate}/>} />
+          <Route exact path="/MyRecipe" render={() => <MyRecipe userLogedIn={userLogedIn} />} />
           <Route exact path="/About" render={() => <About />} />
           <Route exact path="/Details/:id" render={() => <Details userLogedIn={userLogedIn} />} />
           <Route exact path="/Categories/:category" render={() => <Categories />} />
-          <Route exact path="/Update" render={() => <Update getrecipUpdate={getrecipUpdate}/>} />
-          <Route exact path="/Admin" render={() => <Admin />} />
-
+          {/* Update uses the recipe id in the URL so direct links and refreshes work. */}
+          <Route exact path="/Update/:id" render={() => <Update userLogedIn={userLogedIn} />} />
+          <Route exact path="/Admin" render={() => <Admin userLogedIn={userLogedIn} />} />
           <Route component={() => <PageNotFound />} />
         </Switch>
-        <footer >&copy;  
-        <a className={style.linkdin} href="https://www.linkedin.com/in/yakov-kassa-406636116/" target="_blank" rel="noopener noreferrer">Yakov Kassa</a>
-        &nbsp; 
-        <a className={style.linkdin} href="https://www.linkedin.com/in/ofek-saadon-369067194/" target="_blank" rel="noopener noreferrer">Ofek Saadon</a> 
-        <a href=" https://github.com/yakov133/ethio-food" target="_blank" rel="noopener noreferrer"><AiFillGithub  className={style.icons}/></a> </footer>
+
+        <footer>&copy;
+          <a className={style.linkdin} href="https://www.linkedin.com/in/yakov-kassa-406636116/" target="_blank" rel="noopener noreferrer">Yakov Kassa</a>
+          &nbsp;
+          <a className={style.linkdin} href="https://www.linkedin.com/in/ofek-saadon-369067194/" target="_blank" rel="noopener noreferrer">Ofek Saadon</a>
+          <a href=" https://github.com/yakov133/ethio-food" target="_blank" rel="noopener noreferrer"><AiFillGithub className={style.icons} /></a>
+        </footer>
       </div>
     </BrowserRouter>
   );
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// {userLogedIn ? (
-//   <nav className={style.nav_user_loged_in}>
-//     <Link className={style.link_nav} to="/About">
-//       אודות
-//     </Link>
-//     <Link className={style.link_nav} to="/NewRecipe">
-//       מתכון חדש
-//     </Link>
-//     <Link className={style.link_nav} to="/MyRecipe">
-//       המתכונים שלי 
-//     </Link>
-//     <Link className={style.link_nav} to="/AllRecips">
-//       כל המתכונים     
-//     </Link>
-//     <Link className={style.link_nav} to="/">
-//       בית     
-//     </Link>
-    
-//     <button
-//       onClick={() => {
-//         setuserLogedIn(false);
-//         localStorage.clear();
-//         return <Redirect to="/" />
-//       }}
-//       className={style.sign_out}
-//     >
-//       <AiOutlinePoweroff />
-//       {/* <AiOutlineLogout />  */}
-//     </button>
-//   </nav>
-// ) : (
-//   <nav className={style.nav_no_user}>
-//    <Link className={style.link_nav} to="/About">
-//       אודות
-//     </Link>
-//     <Link className={style.link_nav} to="/AllRecips">
-//       כל המתכונים     
-//     </Link>
-//     <Link className={style.link_nav} to="/">
-//       בית     
-//     </Link>
-//     <button onClick={() => setModal(true)} className={style.sign_out}>
-//       <FaRegUser />
-//     </button>
-//   </nav>
-// )}
-// {modal ? (    
-//     <Modal setuserLogedIn={setuserLogedIn} setModal={setModal} />
-// ) : (
-//   ""
-// )}

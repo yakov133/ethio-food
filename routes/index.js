@@ -1,7 +1,57 @@
 var express = require('express');
 const multer = require("multer");
-const uploadDirectory = "uploads/";
-const upload = multer({ dest: uploadDirectory });
+const fs = require("fs-extra");
+const path = require("path");
+const { randomUUID } = require("crypto");
+const {
+  requireAuth,
+  optionalAuth,
+  requireAdmin,
+  requireSelfOrAdmin,
+} = require("../auth");
+
+const uploadDirectory = path.resolve(__dirname, "..", "uploads");
+fs.ensureDirSync(uploadDirectory);
+
+const allowedImageTypes = new Map([
+  ["image/jpeg", ".jpg"],
+  ["image/png", ".png"],
+  ["image/webp", ".webp"],
+  ["image/gif", ".gif"],
+]);
+
+// Uploaded names are generated server-side so user filenames never become paths.
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, uploadDirectory),
+  filename: (req, file, cb) => {
+    const ext = allowedImageTypes.get(file.mimetype);
+    cb(null, `${randomUUID()}${ext}`);
+  },
+});
+
+// Multer rejects oversized files and risky image types before they reach handlers.
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+    files: 1,
+  },
+  fileFilter: (req, file, cb) => {
+    if (!allowedImageTypes.has(file.mimetype)) {
+      const err = new Error("Only jpg, png, webp, and gif images are allowed");
+      err.status = 400;
+      return cb(err);
+    }
+
+    return cb(null, true);
+  },
+});
+
+// Keeps route definitions readable while forwarding async failures to Express.
+const asyncHandler = (handler) => (req, res, next) => (
+  Promise.resolve(handler(req, res, next)).catch(next)
+);
+
 var router = express.Router();
 const {
   addMenyRecpies,
@@ -21,48 +71,27 @@ const {
 
 
 
-router.post("/newCollection", (req, res) => {
-  newCollection(req, res);
-});
+// Write/admin routes are protected here; controller functions still validate data.
+router.post("/newCollection", requireAuth, requireAdmin, asyncHandler(newCollection));
 
-router.post("/recipes", (req, res) => {
-  addMenyRecpies(req, res);
-});
+router.post("/recipes", requireAuth, requireAdmin, asyncHandler(addMenyRecpies));
 
-router.get("/recipes", (req, res) => {
-  getAllRecipes(req, res);
-});
+router.get("/recipes", optionalAuth, asyncHandler(getAllRecipes));
 
-router.get("/recipe/:id", (req, res) => {
-  getOneRecip(req, res);
-});
+router.get("/recipe/:id", optionalAuth, asyncHandler(getOneRecip));
 
-router.get("/categories/:category", (req, res) => {
-  getByCategories(req, res);
-});
+router.get("/categories/:category", asyncHandler(getByCategories));
 
-router.patch("/recipe/:id", (req, res) => {
-  updateRecipe(req, res);
-});
+router.patch("/recipe/:id", requireAuth, asyncHandler(updateRecipe));
 
-router.post("/recipe", upload.single("someFile"), (req, res) => {
-  newRecipe(req, res);
-});
+router.post("/recipe", requireAuth, upload.single("someFile"), asyncHandler(newRecipe));
 
-router.get("/image/:newFileName", (req,res)=>{
-  getImage(req,res);
-})
+router.get("/image/:newFileName", asyncHandler(getImage))
 
-router.get("/recipe/user/:localId", (req, res) => {
-  getUsersRecipes(req,res);
-});
+router.get("/recipe/user/:localId", requireAuth, requireSelfOrAdmin, asyncHandler(getUsersRecipes));
 
-router.delete("/recipe/:id",(req,res)=>{
-  deleteRecipe(req,res);
-})
+router.delete("/recipe/:id", requireAuth, asyncHandler(deleteRecipe))
 
-router.patch("/recipeApprove/:id", (req, res) => {
-  recipeApprove(req, res);
-});
+router.patch("/recipeApprove/:id", requireAuth, requireAdmin, asyncHandler(recipeApprove));
 
 module.exports = router;

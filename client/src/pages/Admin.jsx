@@ -1,35 +1,28 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import style from "./CSS/admin.module.css";
 import { BsDisplay, BsTrash } from "react-icons/bs";
 import { FcApproval } from "react-icons/fc";
 import ClipLoader from "react-spinners/ClipLoader";
+import { Redirect } from "react-router-dom";
+import api, { getImageUrl, isAdminUser } from "../api";
 
-export const Admin = () => {
-  // הגדרת ה-API URL פעם אחת
-  const API_URL = process.env.REACT_APP_API_URL || "https://ethio-food-api.onrender.com";
-  
+export const Admin = ({ userLogedIn }) => {
   const [recipes, setrecipes] = useState([]);
-  const [imageFlag, setimageFlag] = useState(false);
   const [sneakpic, setsneakpic] = useState(null);
   const [showBtn, setshowBtn] = useState(false);
   const [spinner, setspinner] = useState(true);
-  
-  useEffect(getRecpies, []);
 
+  // Admin data is fetched only after the local user passes the admin check.
   useEffect(() => {
-    if (!imageFlag && recipes.length > 0) {
-      let temp = [...recipes];
-      for (let i = 0; i < temp.length; i++) {
-        getImage(temp, temp[i].src, i);
-      }
+    if (isAdminUser(userLogedIn)) {
+      getRecpies();
     }
-  }, [recipes, imageFlag]);
+  }, [userLogedIn]);
 
   function getRecpies() {
-    const URL = `${API_URL}/recipes`;
-    axios
-      .get(URL)
+    api
+      // The server honors includePending only for verified admin users.
+      .get("/recipes?includePending=true")
       .then((res) => {
         let temp = res.data;
         temp = temp.filter((recip) => !recip.adminApproval);
@@ -41,31 +34,6 @@ export const Admin = () => {
         setspinner(false);
       });
   }
-
-  const getImage = async (data, filename, i) => {
-    try {
-      const res = await axios.get(`${API_URL}/image/${filename}`, { 
-        responseType: "blob" 
-      });
-      
-      if (res.status === 200) {
-        const reader = new FileReader();
-        reader.readAsDataURL(res.data);
-        reader.onload = () => {
-          const imgeDataURL = reader.result;
-          data[i].src = imgeDataURL;
-          if (i + 1 === data.length) {
-            setimageFlag(true);
-            setrecipes(data);
-          }
-        };
-      } else {
-        console.log(`Error status code: ${res.status}`);
-      }
-    } catch (err) {
-      console.error("Error fetching image:", err);
-    }
-  };
 
   const show = (recip) => {
     setsneakpic(recip);
@@ -81,14 +49,12 @@ export const Admin = () => {
   };
 
   const deltefromDB = (id) => {
-    const URL = `${API_URL}/recipe/${id}`;
-    axios
-      .delete(URL)
+    api
+      .delete(`/recipe/${id}`)
       .then((res) => {
         if (res.status === 200) {
           setspinner(true);
           getRecpies();
-          setimageFlag(false);
           setsneakpic(null);
           setshowBtn(false);
         }
@@ -101,14 +67,12 @@ export const Admin = () => {
 
   const recipApprove = (recip) => {
     if (window.confirm("בטוח שאתה מאשר?")) {
-      const URL = `${API_URL}/recipeApprove/${recip.id}`;
-      axios
-        .patch(URL)
+      api
+        .patch(`/recipeApprove/${recip.id}`)
         .then((res) => {
           if (res.status === 200) {
             setspinner(true);
             getRecpies();
-            setimageFlag(false);
             setsneakpic(null);
             setshowBtn(false);
             alert("המתכון אושר בהצלחה!");
@@ -123,14 +87,18 @@ export const Admin = () => {
     }
   };
 
+  if (!userLogedIn || !isAdminUser(userLogedIn)) {
+    return <Redirect to="/" />;
+  }
+
   return (
     <div className={style.space}>
       <h1 className={style.preveiew}>ניהול של מתכונים חדשים</h1>
       <br />
-      
+
       {showBtn && sneakpic && (
         <div className={style.modal}>
-          <section 
+          <section
             className={style.closeBtn}
             onClick={() => setshowBtn(false)}
           >
@@ -150,23 +118,23 @@ export const Admin = () => {
             <p className={style.detailsPreveiew}>{sneakpic.Instructions}</p>
           </details>
           <br />
-          
+
           <details>
             <summary>הערות:</summary>
             <p className={style.detailsPreveiew}>{sneakpic.Nots || "אין הערות"}</p>
           </details>
           <br />
-          
+
           {sneakpic.src && (
-            <img 
-              className={style.sneakPicImg} 
-              src={sneakpic.src} 
-              alt={sneakpic.title} 
+            <img
+              className={style.sneakPicImg}
+              src={getImageUrl(sneakpic.src)}
+              alt={sneakpic.title}
             />
           )}
         </div>
       )}
-      
+
       {spinner ? (
         <section className={style.spinner}>
           <ClipLoader size={150} />
@@ -186,28 +154,29 @@ export const Admin = () => {
               <tr key={recip.id || i}>
                 <td>
                   {recip.src && (
-                    <img 
-                      src={recip.src} 
-                      alt={recip.title} 
+                    <img
+                      src={getImageUrl(recip.src)}
+                      alt={recip.title}
+                      loading="lazy"
                     />
                   )}
                 </td>
                 <td title="הצצה">
-                  <BsDisplay 
-                    onClick={() => show(recip)} 
-                    className={style.icon} 
+                  <BsDisplay
+                    onClick={() => show(recip)}
+                    className={style.icon}
                   />
                 </td>
                 <td title="מחיקה">
-                  <BsTrash 
-                    onClick={() => deleteNewRecip(recip)} 
-                    className={style.icon} 
+                  <BsTrash
+                    onClick={() => deleteNewRecip(recip)}
+                    className={style.icon}
                   />
                 </td>
                 <td title="אישור">
-                  <FcApproval 
-                    onClick={() => recipApprove(recip)} 
-                    className={style.icon} 
+                  <FcApproval
+                    onClick={() => recipApprove(recip)}
+                    className={style.icon}
                   />
                 </td>
               </tr>

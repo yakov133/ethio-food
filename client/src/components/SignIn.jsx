@@ -3,6 +3,7 @@ import style from "./CSS/Modal.module.css";
 import { HashLoader } from "react-spinners";
 import React, { useState } from "react";
 import { IoLogInOutline } from "react-icons/io5";
+import { FIREBASE_API_KEY } from "../api";
 
 const SignIn = ({ setuserLogedIn, setModal }) => {
   const [email, setEmail] = useState("");
@@ -15,8 +16,7 @@ const SignIn = ({ setuserLogedIn, setModal }) => {
     setmessage("");
     setspinner(true);
 
-    const API_KEY = "AIzaSyDBeYMdSNAk0KglYfPOg6DygYyinxRfugo";
-    const URL = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`;
+    const URL = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`;
     axios
       .post(URL, { email, password })
       .then((res) => {

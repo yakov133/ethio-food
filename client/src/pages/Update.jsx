@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
 import categorystyle from "./CSS/categories.module.css";
 import style from "./CSS/newRecipe.module.css";
-import axios from "axios";
-import { Redirect } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import appStyle from "../App.module.css";
 import { GrSend } from "react-icons/gr";
 import ClipLoader from "react-spinners/ClipLoader";
+import api, { getImageUrl } from "../api";
 
-const Update = ({ getrecipUpdate }) => {
+const Update = ({ userLogedIn }) => {
   document.title = "Update Recipe";
-  
-  // הגדרת ה-API URL פעם אחת
-  const API_URL = process.env.REACT_APP_API_URL || "https://ethio-food-api.onrender.com";
-  
-  const [id, setid] = useState("");
+
+  const { id } = useParams();
   const [title, settitle] = useState("");
   const [name, setname] = useState("");
   const [imgSrc, setsrc] = useState("");
@@ -21,49 +18,60 @@ const Update = ({ getrecipUpdate }) => {
   const [Ingredients, setIngredients] = useState("");
   const [Instructions, setInstructions] = useState("");
   const [Nots, setNots] = useState("");
-  const [mealTimes, setMealTimes] = useState([]); // מערך של זמני אכילה
+  const [mealTimes, setMealTimes] = useState([]);
   const [flag, setflag] = useState(false);
-  const [loading, setLoading] = useState(false);
-  
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  // Loading by route id makes the update page survive refreshes and direct links.
   useEffect(() => {
-    let obj = getrecipUpdate();
-    if (obj) {
-      setid(obj.id);
-      settitle(obj.title);
-      setname(obj.name);
-      setsrc(obj.src);
-      setcategory(obj.category);
-      setIngredients(obj.Ingredients);
-      setInstructions(obj.Instructions);
-      setNots(obj.Nots || "");
-      setMealTimes(obj.mealTimes || []); // טעינת זמני אכילה קיימים
+    if (!userLogedIn) {
+      setLoading(false);
+      return;
     }
-  }, [getrecipUpdate]);
+
+    api
+      .get(`/recipe/${id}`)
+      .then((res) => {
+        const obj = res.data;
+        settitle(obj.title || "");
+        setname(obj.name || "");
+        setsrc(obj.src || "");
+        setcategory(obj.category || "");
+        setIngredients(obj.Ingredients || "");
+        setInstructions(obj.Instructions || "");
+        setNots(obj.Nots || "");
+        setMealTimes(obj.mealTimes || []);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error loading recipe:", err);
+        setLoading(false);
+      });
+  }, [id, userLogedIn]);
 
   const handleMealTimeChange = (mealTime) => {
-    setMealTimes(prev => {
+    setMealTimes((prev) => {
       if (prev.includes(mealTime)) {
-        return prev.filter(time => time !== mealTime);
-      } else {
-        return [...prev, mealTime];
+        return prev.filter((time) => time !== mealTime);
       }
+
+      return [...prev, mealTime];
     });
   };
 
   const loadtoserver = (e) => {
     e.preventDefault();
-    
-    // בדיקה שצריך לבחור לפחות זמן אכילה אחד
+
     if (mealTimes.length === 0) {
       alert("אנא בחר לפחות זמן אכילה אחד");
       return;
     }
-    
+
     if (window.confirm("יש לאשר את העדכון")) {
-      setLoading(true);
-      console.log("Updating recipe...");
-      
-      const URL = `${API_URL}/recipe/${id}`;
+      setSaving(true);
+
+      // Only editable fields are sent; the server ignores ownership from the client.
       const updateData = {
         title,
         name,
@@ -71,24 +79,21 @@ const Update = ({ getrecipUpdate }) => {
         Ingredients,
         Instructions,
         Nots,
-        mealTimes // הוספת זמני אכילה לעדכון
+        mealTimes,
       };
-      
-      axios
-        .patch(URL, updateData)
+
+      api
+        .patch(`/recipe/${id}`, updateData)
         .then((res) => {
           if (res.status === 200) {
-            console.log("Recipe updated successfully");
             setflag(true);
           }
         })
         .catch((err) => {
           console.error("Error updating recipe:", err);
-          setLoading(false);
+          setSaving(false);
           alert("שגיאה בעדכון המתכון. אנא נסה שוב.");
         });
-    } else {
-      console.log("Update cancelled");
     }
   };
 
@@ -96,22 +101,30 @@ const Update = ({ getrecipUpdate }) => {
     return <Redirect to="/MyRecipe" />;
   }
 
+  if (!userLogedIn) {
+    return <Redirect to="/" />;
+  }
+
+  if (loading) {
+    return <section className={style.spinner}><ClipLoader size={150} /></section>;
+  }
+
   return (
     <div className={appStyle.info}>
       <div className={style.fromRap}>
         <form className={style.form} onSubmit={loadtoserver} dir="rtl">
           <h1 className={categorystyle.h1_style}>עדכון מתכון</h1>
-          
+
           {imgSrc && (
             <div>
-              <img 
-                className={style.updateImg} 
-                src={imgSrc} 
-                alt={`${title} תמונה של`} 
+              <img
+                className={style.updateImg}
+                src={getImageUrl(imgSrc)}
+                alt={`${title} תמונה של`}
               />
             </div>
           )}
-          
+
           <div>
             <label htmlFor="title">שם המאכל:</label>
             <br />
@@ -119,9 +132,9 @@ const Update = ({ getrecipUpdate }) => {
               type="text"
               id="title"
               required
-              defaultValue={title}
+              value={title}
               onChange={(e) => settitle(e.target.value)}
-              disabled={loading}
+              disabled={saving}
             />
           </div>
 
@@ -132,13 +145,13 @@ const Update = ({ getrecipUpdate }) => {
               type="text"
               id="name"
               required
-              defaultValue={name}
+              value={name}
               onChange={(e) => setname(e.target.value)}
-              disabled={loading}
+              disabled={saving}
             />
           </div>
           <br />
-          
+
           <div>
             <p>יש לבחור קטגוריה מתאימה למתכון:</p>
             <input
@@ -146,45 +159,45 @@ const Update = ({ getrecipUpdate }) => {
               id="Vegeterian"
               value="Vegeterian"
               name="category"
-              checked={category === 'Vegeterian'}
+              checked={category === "Vegeterian"}
               onChange={(e) => setcategory(e.target.value)}
-              disabled={loading}
+              disabled={saving}
             />
             <label htmlFor="Vegeterian">צמחוני:</label>
             <br />
-            
+
             <input
               type="radio"
               id="Vegan"
               value="Vegan"
               name="category"
-              checked={category === 'Vegan'}
+              checked={category === "Vegan"}
               onChange={(e) => setcategory(e.target.value)}
-              disabled={loading}
+              disabled={saving}
             />
             <label htmlFor="Vegan">טבעוני:</label>
             <br />
-            
+
             <input
               type="radio"
               id="Milk"
               value="Milk"
               name="category"
-              checked={category === 'Milk'}
+              checked={category === "Milk"}
               onChange={(e) => setcategory(e.target.value)}
-              disabled={loading}
+              disabled={saving}
             />
             <label htmlFor="Milk">חלבי:</label>
             <br />
-            
+
             <input
               type="radio"
               id="Meat"
               value="Meat"
               name="category"
-              checked={category === 'Meat'}
+              checked={category === "Meat"}
               onChange={(e) => setcategory(e.target.value)}
-              disabled={loading}
+              disabled={saving}
             />
             <label htmlFor="Meat">בשרי:</label>
             <br />
@@ -199,7 +212,7 @@ const Update = ({ getrecipUpdate }) => {
               value="בוקר"
               checked={mealTimes.includes("בוקר")}
               onChange={() => handleMealTimeChange("בוקר")}
-              disabled={loading}
+              disabled={saving}
             />
             <label htmlFor="morning">בוקר</label>
             <br />
@@ -210,7 +223,7 @@ const Update = ({ getrecipUpdate }) => {
               value="צהריים"
               checked={mealTimes.includes("צהריים")}
               onChange={() => handleMealTimeChange("צהריים")}
-              disabled={loading}
+              disabled={saving}
             />
             <label htmlFor="lunch">צהריים</label>
             <br />
@@ -221,7 +234,7 @@ const Update = ({ getrecipUpdate }) => {
               value="ערב"
               checked={mealTimes.includes("ערב")}
               onChange={() => handleMealTimeChange("ערב")}
-              disabled={loading}
+              disabled={saving}
             />
             <label htmlFor="dinner">ערב</label>
             <br />
@@ -232,7 +245,7 @@ const Update = ({ getrecipUpdate }) => {
               value="נשנושים וקינוחים"
               checked={mealTimes.includes("נשנושים וקינוחים")}
               onChange={() => handleMealTimeChange("נשנושים וקינוחים")}
-              disabled={loading}
+              disabled={saving}
             />
             <label htmlFor="snacks">נשנושים וקינוחים</label>
             <br />
@@ -243,14 +256,14 @@ const Update = ({ getrecipUpdate }) => {
             <label htmlFor="Ingredients">מצרכים:</label>
             <br />
             <textarea
-              name=""
+              name="Ingredients"
               id="Ingredients"
               cols="60"
               rows="10"
               required
-              defaultValue={Ingredients}
+              value={Ingredients}
               onChange={(e) => setIngredients(e.target.value)}
-              disabled={loading}
+              disabled={saving}
             ></textarea>
           </div>
           <br />
@@ -259,14 +272,14 @@ const Update = ({ getrecipUpdate }) => {
             <label htmlFor="Instructions">הוראות הכנה:</label>
             <br />
             <textarea
-              name=""
+              name="Instructions"
               id="Instructions"
               cols="60"
               rows="10"
               required
-              defaultValue={Instructions}
+              value={Instructions}
               onChange={(e) => setInstructions(e.target.value)}
-              disabled={loading}
+              disabled={saving}
             ></textarea>
           </div>
           <br />
@@ -275,24 +288,24 @@ const Update = ({ getrecipUpdate }) => {
             <label htmlFor="Nots">הערות:</label>
             <br />
             <textarea
-              name=""
+              name="Nots"
               id="Nots"
               cols="60"
               rows="10"
-              defaultValue={Nots}
+              value={Nots}
               onChange={(e) => setNots(e.target.value)}
-              disabled={loading}
+              disabled={saving}
             ></textarea>
           </div>
           <br />
 
-          <button 
-            className={style.send} 
-            type="submit" 
+          <button
+            className={style.send}
+            type="submit"
             title="לשלוח"
-            disabled={loading}
+            disabled={saving}
           >
-            {loading ? <ClipLoader size={20} /> : <GrSend />}
+            {saving ? <ClipLoader size={20} /> : <GrSend />}
           </button>
         </form>
       </div>

@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
 import style from "./CSS/categories.module.css";
-import axios from "axios";
 import { MdReadMore } from "react-icons/md";
 import { useHistory, useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+import api, { getImageUrl } from "../api";
 
 const Categories = () => {
-  // הגדרת ה-API URL פעם אחת בראש הקומפוננטה
-  const API_URL = process.env.REACT_APP_API_URL || "https://ethio-food-api.onrender.com";
-  
   const [recipes, setRecipse] = useState([]);
-  const [imageFlag, setimageFlag] = useState(false);
   const [spinner, setspinner] = useState(true);
   const history = useHistory();
   const { category } = useParams();
@@ -27,55 +23,19 @@ const Categories = () => {
   }
 
   useEffect(() => {
-    const URL = `${API_URL}/categories/${category}`;
-    
-    axios
-      .get(URL)
+    setspinner(true);
+    // Category pages use the server filter so pending recipes stay hidden.
+    api
+      .get(`/categories/${category}`)
       .then((res) => {
-        let temp = res.data;
-        temp = temp.filter((recip) => recip.adminApproval);
         setspinner(false);
-        setRecipse(temp);
+        setRecipse(res.data);
       })
       .catch((err) => {
         console.log("Error fetching categories:", err);
         setspinner(false);
       });
   }, [category]);
-
-  useEffect(() => {
-    if (!imageFlag && recipes.length > 0) {
-      let temp = [...recipes];
-      for (let i = 0; i < temp.length; i++) {
-        getImage(temp, temp[i].src, i);
-      }
-    }
-  }, [recipes, imageFlag]);
-
-  const getImage = async (data, filename, i) => {
-    try {
-      const res = await axios.get(`${API_URL}/image/${filename}`, { 
-        responseType: "blob" 
-      });
-      
-      if (res.status === 200) {
-        const reader = new FileReader();
-        reader.readAsDataURL(res.data);
-        reader.onload = () => {
-          const imgeDataURL = reader.result;
-          data[i].src = imgeDataURL;
-          if (i + 1 === data.length) {
-            setimageFlag(true);
-            setRecipse(data);
-          }
-        };
-      } else {
-        console.log(`Error status code: ${res.status}`);
-      }
-    } catch (err) {
-      console.error("Error fetching image:", err);
-    }
-  };
 
   return (
     <div className={style.info}>
@@ -93,8 +53,9 @@ const Categories = () => {
               </p>
               <br />
               <img
-                src={recip.src && recip.src.includes("data") ? recip.src : ""}
+                src={getImageUrl(recip.src)}
                 alt={`${recip.title} תמונה`}
+                loading="lazy"
               />
               <p>
                 <MdReadMore

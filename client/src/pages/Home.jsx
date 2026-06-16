@@ -1,25 +1,21 @@
-import React, { useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import React from "react";
+import { useHistory } from "react-router-dom";
 import style from "./CSS/home.module.css";
 import appStyle from "../App.module.css";
 
-const Home = ({ setCategory }) => {
-  const [flag, setflag] = useState(false);
+const Home = () => {
   const history = useHistory();
   document.title = "Home";
 
-  if (flag) {
-    return <Redirect to="/Categories" />;
-  }
-
   return (
     <div className={appStyle.info}>
-      
       <main>
         <section className={style.slide}>
           <article className={style.card}>
-            <img src="https://media.istockphoto.com/photos/ethiopian-meal-with-injera-picture-id1266172610?b=1&k=20&m=1266172610&s=170667a&w=0&h=0uy8vf3WCxQDlxHClbRbZirqigrzz2UGLxaLbgFVqWM=" 
-            alt="ethyopian food"/>
+            <img
+              src="https://media.istockphoto.com/photos/ethiopian-meal-with-injera-picture-id1266172610?b=1&k=20&m=1266172610&s=170667a&w=0&h=0uy8vf3WCxQDlxHClbRbZirqigrzz2UGLxaLbgFVqWM="
+              alt="ethyopian food"
+            />
           </article>
 
           <article className={style.card}>
@@ -59,7 +55,7 @@ const Home = ({ setCategory }) => {
           }}
         >
           <img
-          title="לדף הקטגוריות"
+            title="לדף הקטגוריות"
             src="https://cdn.pixabay.com/photo/2016/10/17/14/31/background-1747777_1280.jpg"
             alt="meat"
           />
@@ -73,7 +69,7 @@ const Home = ({ setCategory }) => {
           }}
         >
           <img
-          title="לדף הקטגוריות"
+            title="לדף הקטגוריות"
             src="https://cdn.pixabay.com/photo/2016/10/17/14/31/background-1747777_1280.jpg"
             alt="milk"
           />
@@ -87,7 +83,7 @@ const Home = ({ setCategory }) => {
           }}
         >
           <img
-          title="לדף הקטגוריות"
+            title="לדף הקטגוריות"
             src="https://cdn.pixabay.com/photo/2016/10/17/14/31/background-1747777_1280.jpg"
             alt="vegan"
           />
@@ -101,7 +97,7 @@ const Home = ({ setCategory }) => {
           }}
         >
           <img
-          title="לדף הקטגוריות"
+            title="לדף הקטגוריות"
             src="https://cdn.pixabay.com/photo/2016/10/17/14/31/background-1747777_1280.jpg"
             alt="vegeterian"
           />

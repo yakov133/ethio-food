@@ -1,15 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import { AiFillGithub } from "react-icons/ai";
-import { FaRegUser } from "react-icons/fa";
-import { AiOutlinePoweroff } from "react-icons/ai";
-import { Redirect } from "react-router-dom";
 import { TiThMenu } from "react-icons/ti";
 import style from "../App.module.css";
 import Modal from "./Modal";
+import { isAdminUser } from "../api";
 
 
 function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethumburgerlinks}) {
+  // Logout clears only auth state, leaving unrelated browser storage untouched.
+  const signOut = () => {
+    setuserLogedIn(false);
+    sethumburgerlinks(false);
+    localStorage.removeItem("auth");
+  };
 
   return <div>
       {userLogedIn ? (
@@ -26,7 +29,7 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
             <Link className={style.link_nav} to="/NewRecipe">
               מתכון חדש
             </Link>
-            {(userLogedIn.email === "yakov133@walla.com"||userLogedIn.email === "ofekavi1104@gmail.com")?
+            {isAdminUser(userLogedIn)?
             <Link className={style.link_nav} to="/Admin">
             ניהול
           </Link>
@@ -37,11 +40,7 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
             </Link>
             
             <button
-              onClick={() => {
-                setuserLogedIn(false);
-                localStorage.clear();
-                return <Redirect to="/" />
-              }}
+              onClick={signOut}
               className={style.sign_out}
             >
               יציאה
@@ -77,15 +76,12 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
        {userLogedIn ? (
           <nav className={style.nav_phone} >
             <button
-              onClick={() => {
-                setuserLogedIn(false);
-                localStorage.clear();
-                return <Redirect to="/" />
-            }}
-            className={style.sign_out_btn_mobile}>
+              onClick={signOut}
+              className={style.sign_out_btn_mobile}>
               יציאה
             </button>
 
+            {/* The admin link is convenience only; server middleware still enforces access. */}
             <Link onClick={()=>sethumburgerlinks(!humburgerlinks)} to="/">
               בית     
             </Link>
@@ -101,7 +97,7 @@ function Navbar({userLogedIn,setuserLogedIn,modal,setModal,humburgerlinks,sethum
             <Link onClick={()=>sethumburgerlinks(!humburgerlinks)} to="/About">
               אודות
             </Link>
-            {(userLogedIn.email === "yakov133@walla.com"||userLogedIn.email === "ofekavi1104@gmail.com")?
+            {isAdminUser(userLogedIn)?
             <Link onClick={()=>sethumburgerlinks(!humburgerlinks)} to="/Admin">
             ניהול
           </Link>

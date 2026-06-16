@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import appStyle from "../App.module.css";
 import style from "./CSS/newRecipe.module.css";
-import axios from "axios";
 import { Redirect } from "react-router-dom";
 import { GrSend } from "react-icons/gr";
 import ClipLoader from "react-spinners/ClipLoader";
+import api from "../api";
 
 const NewRecipe = ({ userLogedIn }) => {
   document.title = "New Recipe";
-  
-  // הגדרת ה-API URL פעם אחת
-  const API_URL = process.env.REACT_APP_API_URL || "https://ethio-food-api.onrender.com";
-  
+
   const [title, settitle] = useState("");
   const [name, setname] = useState("");
   const [file, setfile] = useState("");
@@ -19,32 +16,32 @@ const NewRecipe = ({ userLogedIn }) => {
   const [Ingredients, setIngredients] = useState("");
   const [Instructions, setInstructions] = useState("");
   const [Nots, setNots] = useState("");
-  const [mealTimes, setMealTimes] = useState([]); // מערך של זמני אכילה
+  const [mealTimes, setMealTimes] = useState([]);
   const [flag, setflag] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleMealTimeChange = (mealTime) => {
-    setMealTimes(prev => {
+    setMealTimes((prev) => {
       if (prev.includes(mealTime)) {
-        return prev.filter(time => time !== mealTime);
-      } else {
-        return [...prev, mealTime];
+        return prev.filter((time) => time !== mealTime);
       }
+
+      return [...prev, mealTime];
     });
   };
 
   const loadtoserver = (e) => {
     e.preventDefault();
-    
-    // בדיקה שצריך לבחור לפחות זמן אכילה אחד
+
     if (mealTimes.length === 0) {
       alert("אנא בחר לפחות זמן אכילה אחד");
       return;
     }
-    
+
     setLoading(true);
-    
-    let formData = new FormData();
+
+    // Multipart keeps the image and validated recipe fields in one request.
+    const formData = new FormData();
     formData.append("someFile", file);
     formData.append("title", title);
     formData.append("name", name);
@@ -52,25 +49,21 @@ const NewRecipe = ({ userLogedIn }) => {
     formData.append("Ingredients", Ingredients);
     formData.append("Instructions", Instructions);
     formData.append("Nots", Nots);
-    formData.append("mealTimes", JSON.stringify(mealTimes)); // שליחה כ-JSON string
-    formData.append("localId", userLogedIn.localId);
+    formData.append("mealTimes", JSON.stringify(mealTimes));
 
-    const URL = `${API_URL}/recipe`;
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     };
 
-    axios
-      .post(URL, formData, config)
+    api
+      .post("/recipe", formData, config)
       .then((res) => {
-        console.log("Server response:", res.status, res.data);
-        if (res.status === 200 || res.status === 201) {
+        if (res.status === 201) {
           setflag(true);
           alert("המתכון נוסף בהצלחה!");
         } else {
-          console.log(`Error status code: ${res.status}`);
           setLoading(false);
           alert("שגיאה בהוספת המתכון");
         }
@@ -84,6 +77,10 @@ const NewRecipe = ({ userLogedIn }) => {
 
   if (flag) {
     return <Redirect to="/AllRecips" />;
+  }
+
+  if (!userLogedIn) {
+    return <Redirect to="/" />;
   }
 
   return (
@@ -221,9 +218,9 @@ const NewRecipe = ({ userLogedIn }) => {
 
           <div className={style.div}>
             <p>נא להעלות תמונה למתכון:</p>
-            <input 
-              type="file" 
-              onChange={(e) => setfile(e.target.files[0])} 
+            <input
+              type="file"
+              onChange={(e) => setfile(e.target.files[0])}
               required
               disabled={loading}
               accept="image/*"
@@ -278,9 +275,9 @@ const NewRecipe = ({ userLogedIn }) => {
           </div>
           <br />
 
-          <button 
-            className={style.send} 
-            type="submit" 
+          <button
+            className={style.send}
+            type="submit"
             title="לשלוח"
             disabled={loading}
           >
