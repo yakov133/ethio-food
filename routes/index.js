@@ -95,3 +95,4 @@ router.delete("/recipe/:id", requireAuth, asyncHandler(deleteRecipe))
 router.patch("/recipeApprove/:id", requireAuth, requireAdmin, asyncHandler(recipeApprove));
 
 module.exports = router;
+
