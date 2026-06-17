@@ -15,7 +15,7 @@ test('renders the not found page for unknown client routes', () => {
   render(<App />);
 
   // The static host rewrite should let React Router decide which fallback page to show.
-  expect(screen.getByText(/Sorry This Page Can't Be Found/i)).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: /העמוד לא נמצא/ })).toBeInTheDocument();
 });
 
 test('hides admin delete controls from regular users', () => {

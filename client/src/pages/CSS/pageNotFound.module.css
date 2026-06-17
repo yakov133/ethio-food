@@ -1,0 +1,94 @@
+.wrapper {
+  align-items: center;
+  background: #f7f7f7;
+  color: #171717;
+  display: flex;
+  justify-content: center;
+  min-height: calc(100vh - 130px);
+  padding: 96px 24px 56px;
+  text-align: center;
+}
+
+.content {
+  max-width: 680px;
+  width: 100%;
+}
+
+.code {
+  color: #fd7c04;
+  font-size: 4.5rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.content h1 {
+  font-size: 2.4rem;
+  line-height: 1.25;
+  margin-bottom: 14px;
+}
+
+.message {
+  color: #444;
+  font-size: 1.25rem;
+  line-height: 1.7;
+  margin: 0 auto 28px;
+  max-width: 560px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+
+.primaryLink,
+.secondaryLink {
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  min-width: 150px;
+  padding: 12px 18px;
+  text-decoration: none;
+}
+
+.primaryLink {
+  background: #171717;
+  color: #ffffff;
+}
+
+.secondaryLink {
+  border: 1px solid #171717;
+  color: #171717;
+}
+
+.primaryLink:hover,
+.secondaryLink:hover {
+  background: #fd7c04;
+  border-color: #fd7c04;
+  color: #ffffff;
+}
+
+@media screen and (max-width: 640px) {
+  .wrapper {
+    padding: 88px 18px 52px;
+  }
+
+  .code {
+    font-size: 3.4rem;
+  }
+
+  .content h1 {
+    font-size: 1.9rem;
+  }
+
+  .message {
+    font-size: 1.05rem;
+  }
+
+  .primaryLink,
+  .secondaryLink {
+    width: 100%;
+  }
+}
