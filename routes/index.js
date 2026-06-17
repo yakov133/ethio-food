@@ -1,8 +1,8 @@
 var express = require('express');
 const multer = require("multer");
 const fs = require("fs-extra");
-const path = require("path");
 const { randomUUID } = require("crypto");
+const { uploadDirectory } = require("../uploadConfig");
 const {
   requireAuth,
   optionalAuth,
@@ -10,7 +10,7 @@ const {
   requireSelfOrAdmin,
 } = require("../auth");
 
-const uploadDirectory = path.resolve(__dirname, "..", "uploads");
+// The upload directory is shared with image serving/deletion so all file paths stay consistent.
 fs.ensureDirSync(uploadDirectory);
 
 const allowedImageTypes = new Map([

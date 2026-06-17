@@ -4,8 +4,8 @@ const path = require("path");
 const { randomUUID } = require("crypto");
 const { getDb } = require("./db");
 const { isAdminUser } = require("./auth");
+const { uploadDirectory } = require("./uploadConfig");
 
-const uploadDirectory = path.resolve(__dirname, "uploads");
 const recipesCollection = "recipes";
 
 const allowedCategories = new Set(["Vegeterian", "Vegan", "Milk", "Meat"]);
@@ -178,6 +178,14 @@ async function updateRecipe(req, res) {
 
   const bodyKeys = Object.keys(req.body || {});
   if (bodyKeys.length === 1 && Object.prototype.hasOwnProperty.call(req.body, "comments")) {
+    // Pending recipes stay private; only approved recipes, admins, or owners can receive comments.
+    const canComment = recipe.adminApproval
+      || isAdminUser(req.user)
+      || recipe.localId === req.user.localId;
+    if (!canComment) {
+      throw createError(404, "Recipe was not found");
+    }
+
     const comment = requireText(req.body, "comments", "Comment", 500);
     // Keep only the newest five comments without reading and rewriting the document.
     await collection.updateOne(

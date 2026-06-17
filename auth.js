@@ -118,7 +118,7 @@ async function requireAuth(req, res, next) {
   }
 }
 
-// Allows public reads, while still attaching req.user when a token is present.
+// Allows public reads, while still attaching req.user when a valid token is present.
 async function optionalAuth(req, res, next) {
   const token = getBearerToken(req);
   if (!token) {
@@ -129,7 +129,9 @@ async function optionalAuth(req, res, next) {
     req.user = await verifyFirebaseToken(token);
     return next();
   } catch (err) {
-    return res.status(err.status || 401).json({ error: "Invalid authentication token" });
+    // Public read routes must keep working even if the browser holds an expired Firebase token.
+    req.user = null;
+    return next();
   }
 }
 

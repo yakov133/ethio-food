@@ -184,6 +184,7 @@ MONGODB_DB_NAME=ethyopianfood
 CLIENT_ORIGINS=http://localhost:5173
 FIREBASE_API_KEY=<your-firebase-api-key>
 ADMIN_EMAILS=admin@example.com,another-admin@example.com
+UPLOAD_DIR=/opt/render/project/src/uploads
 ```
 
 | משתנה | חובה | הסבר |
@@ -194,6 +195,7 @@ ADMIN_EMAILS=admin@example.com,another-admin@example.com
 | `CLIENT_ORIGINS` | מומלץ | רשימת כתובות לקוח שמורשות לפנות לשרת, מופרדות בפסיקים. |
 | `FIREBASE_API_KEY` | כן | מפתח Firebase המשמש לאימות אסימוני משתמשים. |
 | `ADMIN_EMAILS` | לא | רשימת כתובות אימייל של מנהלים, מופרדות בפסיקים. |
+| `UPLOAD_DIR` | לא | תיקיית שמירת תמונות שהועלו. ברירת מחדל: `uploads` בתוך השרת. ב-Render מומלץ לחבר לתיקייה זו Persistent Disk. |
 
 ### Client `client/.env`
 
@@ -233,6 +235,7 @@ Authorization: Bearer <firebase-id-token>
 - סוגי קבצים מותרים: `jpg`, `png`, `webp`, `gif`.
 - גודל מקסימלי: `5MB`.
 - שמות הקבצים נוצרים בצד השרת כדי למנוע שימוש בשם קובץ לא בטוח.
+- אם מגדירים `UPLOAD_DIR`, השרת ישמור ויקרא תמונות מאותה תיקייה מוגדרת, בלי לשנות את כתובות ה-API.
 
 ## פריסה
 
@@ -253,6 +256,7 @@ npm start
 - `CLIENT_ORIGINS`
 - `FIREBASE_API_KEY`
 - `ADMIN_EMAILS`
+- `UPLOAD_DIR` אם מחברים Persistent Disk לשמירת תמונות לאורך זמן
 
 ### Client
 
