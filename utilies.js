@@ -39,6 +39,11 @@ function optionalText(body, field, maxLength = 5000) {
   return value;
 }
 
+function getCommentAuthorName(user) {
+  const emailPrefix = cleanText(user && user.email).split("@")[0];
+  return emailPrefix || "משתמש";
+}
+
 function parseMealTimes(value) {
   let mealTimes = value;
 
@@ -186,13 +191,22 @@ async function updateRecipe(req, res) {
       throw createError(404, "Recipe was not found");
     }
 
-    const comment = requireText(req.body, "comments", "Comment", 500);
+    const commentText = requireText(req.body, "comments", "Comment", 500);
+    const createdAt = new Date();
+    // New comments keep chat-style metadata while old string comments can still be displayed by the client.
+    const comment = {
+      text: commentText,
+      authorName: getCommentAuthorName(req.user),
+      authorId: req.user.localId,
+      createdAt,
+    };
+
     // Keep only the newest five comments without reading and rewriting the document.
     await collection.updateOne(
       { id: req.params.id },
       {
         $push: { comments: { $each: [comment], $position: 0, $slice: 5 } },
-        $set: { updatedAt: new Date() },
+        $set: { updatedAt: createdAt },
       }
     );
     return res.status(200).json({ message: "Comment added" });

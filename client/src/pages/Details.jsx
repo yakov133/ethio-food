@@ -6,6 +6,39 @@ import { useHistory, useParams } from "react-router-dom";
 import api, { getImageUrl, isAdminUser } from "../api";
 import AdminRecipeDeleteButton from "../components/AdminRecipeDeleteButton";
 
+const formatCommentDate = (value) => {
+  if (!value) {
+    return "";
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  return new Intl.DateTimeFormat("he-IL", {
+    dateStyle: "short",
+    timeStyle: "short",
+  }).format(date);
+};
+
+const normalizeComment = (comment) => {
+  if (typeof comment === "string") {
+    return {
+      text: comment,
+      authorName: "תגובה ישנה",
+      createdAt: "",
+    };
+  }
+
+  return {
+    text: comment && comment.text ? comment.text : "",
+    authorName: comment && comment.authorName ? comment.authorName : "משתמש",
+    authorId: comment && comment.authorId ? comment.authorId : "",
+    createdAt: comment && comment.createdAt ? comment.createdAt : "",
+  };
+};
+
 const Details = ({ userLogedIn }) => {
   const { id } = useParams();
   const history = useHistory();
@@ -126,7 +159,25 @@ const Details = ({ userLogedIn }) => {
 
         <div className={style.p_comments}>
           {Array.isArray(recipe.comments)
-            ? recipe.comments.map((item, i) => <p key={i}>{item}</p>)
+            ? recipe.comments.map((item, i) => {
+                const comment = normalizeComment(item);
+                const formattedDate = formatCommentDate(comment.createdAt);
+
+                return (
+                  <article
+                    className={style.commentItem}
+                    key={`${comment.createdAt || "old"}-${comment.authorId || i}`}
+                  >
+                    <header className={style.commentMeta}>
+                      <span className={style.commentAuthor}>{comment.authorName}</span>
+                      {formattedDate && (
+                        <time dateTime={comment.createdAt}>{formattedDate}</time>
+                      )}
+                    </header>
+                    <p className={style.commentText}>{comment.text}</p>
+                  </article>
+                );
+              })
             : ""}
         </div>
       </div>
