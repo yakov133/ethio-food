@@ -11,10 +11,10 @@ test('renders the public recipe navigation', () => {
 });
 
 test('renders the not found page for unknown client routes', () => {
-  window.history.pushState({}, '', '/fssdasd');
+  window.location.hash = '#/fssdasd';
   render(<App />);
 
-  // The static host rewrite should let React Router decide which fallback page to show.
+  // Hash routing keeps unknown client paths in React instead of sending them to the static host.
   expect(screen.getByRole('heading', { name: /העמוד לא נמצא/ })).toBeInTheDocument();
 });
 

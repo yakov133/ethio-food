@@ -1,6 +1,6 @@
 import style from "./App.module.css";
 import React, { useState } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { HashRouter, Switch, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import AllRecips from "./pages/AllRecips";
 import PageNotFound from "./pages/PageNotFound";
@@ -22,7 +22,8 @@ function App() {
   const [humburgerlinks, sethumburgerlinks] = useState(false);
 
   return (
-    <BrowserRouter>
+    // HashRouter keeps client routes after # so refreshes never ask the static host for unknown paths.
+    <HashRouter>
       <div>
         <Navbar
           userLogedIn={userLogedIn}
@@ -54,7 +55,7 @@ function App() {
           <a href=" https://github.com/yakov133/ethio-food" target="_blank" rel="noopener noreferrer"><AiFillGithub className={style.icons} /></a>
         </footer>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
