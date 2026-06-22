@@ -86,10 +86,8 @@ ethio-food-main/
 ├── utilies.js             # לוגיקת מתכונים, תמונות, תגובות ואישורים
 ├── render.yaml            # Blueprint לפריסת API ו-Static Site ב-Render
 ├── routes/
-│   ├── index.js           # נתיבי המתכונים והתמונות
-│   └── users.js           # נתיב דמו למשתמשים
+│   └── index.js           # נתיבי המתכונים, התמונות, התגובות והניהול
 ├── uploads/               # תמונות שהועלו דרך המערכת
-├── public/                # קבצים סטטיים של השרת
 ├── client/
 │   ├── src/
 │   │   ├── pages/         # עמודי האפליקציה
@@ -97,8 +95,7 @@ ethio-food-main/
 │   │   └── api.js         # הגדרת API ואימות בצד הלקוח
 │   ├── public/
 │   └── package.json
-├── package.json           # תלות ופקודות צד שרת
-└── Procfile               # הגדרת הרצה לסביבת ענן תומכת
+└── package.json           # תלות ופקודות צד שרת
 ```
 
 ## התקנה והרצה מקומית

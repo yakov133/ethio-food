@@ -1,10 +1,8 @@
 const express = require('express');
-const path = require('path');
 const logger = require('morgan');
 const cors = require('cors');
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 
 const app = express();
 const allowedClientOrigins = process.env.CLIENT_ORIGINS
@@ -17,9 +15,6 @@ app.use(cors({ origin: allowedClientOrigins }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// משרת קבצים ציבוריים של השרת בלבד, בלי תלות בבילד של צד הלקוח.
-app.use(express.static(path.join(__dirname, 'public')));
-
 // Health endpoints keep the API service deployable and testable on Render by itself.
 app.get(['/', '/health'], (req, res) => {
   res.json({ status: "ok", service: "ethio-food-api" });
@@ -27,7 +22,6 @@ app.get(['/', '/health'], (req, res) => {
 
 // API routes
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 // API callers receive JSON errors, while browser fallback requests get plain text.
 app.use(function (err, req, res, next) {
@@ -47,6 +41,5 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
-
 
 
